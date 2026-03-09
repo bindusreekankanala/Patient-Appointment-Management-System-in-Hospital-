@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<!-- CO1: Proper HTML document structure, headings, paragraphs, links -->
+<!-- CO5: SEO meta tags, semantic structure -->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CO5: SEO Meta Tags -->
+  <meta name="description" content="MediConnect — Find hospitals, book appointments, store medical reports, and manage your health all in one place.">
+  <meta name="keywords" content="hospital appointment, doctor booking, medical records, health management">
+  <meta name="author" content="MediConnect">
+  <meta property="og:title" content="MediConnect — Patient Appointment Management System">
+  <meta property="og:description" content="Your complete health management platform">
+  <title>MediConnect — Patient Appointment Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- CO5: Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+<!-- CO2: Semantic HTML — <header>, <nav> -->
+<header>
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand" aria-label="MediConnect Home">
+        <div class="brand-icon">🏥</div>
+        <span class="brand-name">MediConnect</span>
+      </a>
+
+      <ul class="nav-links" id="navLinks" role="list">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="hospitals.html">Find Hospitals</a></li>
+        <li><a href="appointment.html">Book Appointment</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="reports.html">My Reports</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode" title="Toggle dark mode"></button>
+        <span id="navUserInfo" style="color:var(--clr-nav-text);font-size:.85rem;font-weight:500"></span>
+        <a href="login.html" class="btn btn-outline" id="navLoginBtn">Login</a>
+        <button class="btn btn-danger btn-sm" id="navLogoutBtn" style="display:none">Logout</button>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<!-- CO2: Semantic — <main> -->
+<main>
+  <!-- Hero Section -->
+  <!-- CO2: CSS Grid, Flexbox layout -->
+  <section class="hero" aria-labelledby="heroHeading">
+    <div class="hero-content container">
+      <div class="hero-text">
+        <div class="badge">🏆 #1 Patient Management Platform</div>
+        <!-- CO1: Headings hierarchy -->
+        <h1 id="heroHeading">Your Health, <em>Simplified.</em></h1>
+        <p>Find nearby hospitals, book appointments with top doctors, store medical records, and receive timely reminders — all from one seamless platform.</p>
+        <div class="hero-cta">
+          <a href="register.html" class="btn btn-primary btn-lg">Get Started Free →</a>
+          <a href="hospitals.html" class="btn btn-outline btn-lg">Find Hospitals</a>
+        </div>
+      </div>
+
+      <div class="hero-visual stagger">
+        <div class="stat-card">
+          <div class="stat-num" data-count="500">500+</div>
+          <div class="stat-label">Hospitals</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">10K+</div>
+          <div class="stat-label">Doctors</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">50K+</div>
+          <div class="stat-label">Patients</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">4.9⭐</div>
+          <div class="stat-label">Avg Rating</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Emergency Strip -->
+  <section class="container" style="margin-top:2rem">
+    <div class="emergency-strip" role="alert">
+      <div>
+        <h3>🚨 Medical Emergency?</h3>
+        <p>Call emergency services immediately or find the nearest hospital.</p>
+      </div>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <a href="tel:911" class="btn btn-outline" style="border-color:rgba(255,255,255,.6);color:#fff;font-weight:700">📞 Call 911</a>
+        <a href="hospitals.html" class="btn btn-outline" style="border-color:rgba(255,255,255,.6);color:#fff">🏥 Find ER</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section (CO2: CSS Grid) -->
+  <section class="section observe" aria-labelledby="featuresHeading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="featuresHeading">Everything You Need</h2>
+        <p>A complete suite of tools to manage your healthcare journey.</p>
+      </div>
+      <!-- CO2: CSS Grid layout -->
+      <div class="card-grid-3 stagger">
+        <article class="card" style="border-top:3px solid var(--clr-primary)">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🗺️</div>
+          <h3>Hospital Finder</h3>
+          <p>Use GPS to discover nearby hospitals, clinics, and specialists with real-time distance information.</p>
+          <a href="hospitals.html" class="btn btn-secondary btn-sm mt-2">Find Hospitals →</a>
+        </article>
+        <article class="card" style="border-top:3px solid var(--clr-accent)">
+          <div style="font-size:2.5rem;margin-bottom:1rem">📅</div>
+          <h3>Easy Booking</h3>
+          <p>Book appointments with your preferred doctor, choose departments, and select convenient time slots.</p>
+          <a href="appointment.html" class="btn btn-primary btn-sm mt-2">Book Now →</a>
+        </article>
+        <article class="card" style="border-top:3px solid var(--clr-green)">
+          <div style="font-size:2.5rem;margin-bottom:1rem">📁</div>
+          <h3>Report Storage</h3>
+          <p>Securely upload and store your medical reports, lab results, and prescriptions in one place.</p>
+          <a href="reports.html" class="btn btn-success btn-sm mt-2">Upload Reports →</a>
+        </article>
+        <article class="card" style="border-top:3px solid var(--clr-yellow)">
+          <div style="font-size:2.5rem;margin-bottom:1rem">⭐</div>
+          <h3>Doctor Reviews</h3>
+          <p>Rate and review doctors based on your experience. Help others make informed healthcare decisions.</p>
+          <a href="dashboard.html" class="btn btn-sm mt-2" style="background:var(--clr-yellow);color:#fff">Rate Doctors →</a>
+        </article>
+        <article class="card" style="border-top:3px solid #9b59b6">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🔔</div>
+          <h3>Smart Reminders</h3>
+          <p>Never miss an appointment with automatic browser notifications and dashboard alerts.</p>
+          <a href="dashboard.html" class="btn btn-sm mt-2" style="background:#9b59b6;color:#fff">View Dashboard →</a>
+        </article>
+        <article class="card" style="border-top:3px solid #e74c3c">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🚨</div>
+          <h3>Emergency Contacts</h3>
+          <p>Quick access to emergency contacts, nearest ERs, and critical health information when you need it most.</p>
+          <a href="#emergency" class="btn btn-danger btn-sm mt-2">Emergency Info →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section observe" style="background:var(--clr-surface)">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Get started in 3 simple steps</p>
+      </div>
+      <!-- CO2: Flexbox -->
+      <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;justify-content:center">
+        <div style="text-align:center;max-width:220px">
+          <div style="width:72px;height:72px;background:var(--clr-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;color:#fff">1</div>
+          <h4>Register Account</h4>
+          <p style="font-size:.9rem">Create your free patient account with basic health information.</p>
+        </div>
+        <div style="font-size:2rem;color:var(--clr-border)">→</div>
+        <div style="text-align:center;max-width:220px">
+          <div style="width:72px;height:72px;background:var(--clr-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;color:#fff">2</div>
+          <h4>Find & Book</h4>
+          <p style="font-size:.9rem">Locate nearby hospitals and book appointments with your chosen doctor.</p>
+        </div>
+        <div style="font-size:2rem;color:var(--clr-border)">→</div>
+        <div style="text-align:center;max-width:220px">
+          <div style="width:72px;height:72px;background:var(--clr-green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1rem;color:#fff">3</div>
+          <h4>Manage Health</h4>
+          <p style="font-size:.9rem">Track appointments, upload reports, and rate your experience.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="register.html" class="btn btn-primary btn-lg">Start Your Health Journey →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Health Tips Section -->
+  <section class="section observe" id="health-tips" aria-labelledby="tipsHeading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="tipsHeading">💡 Daily Health Tips</h2>
+        <p>Simple habits that make a big difference in your wellbeing.</p>
+      </div>
+      <div class="card-grid-3 stagger" id="healthTipsGrid">
+        <!-- Filled by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Emergency Section -->
+  <section class="section observe" id="emergency" style="background:var(--clr-surface)" aria-labelledby="emergencyHeading">
+    <div class="container">
+      <div class="section-header">
+        <h2 id="emergencyHeading">🚨 Emergency Contacts</h2>
+        <p>Keep these numbers handy. In a medical emergency, every second counts.</p>
+      </div>
+      <div class="card-grid-4">
+        <div class="card" style="text-align:center;border-top:4px solid var(--clr-red)">
+          <div style="font-size:2.5rem;margin-bottom:.75rem">🚑</div>
+          <h4>Ambulance</h4>
+          <a href="tel:911" style="font-size:1.4rem;font-weight:700;color:var(--clr-red)">911</a>
+        </div>
+        <div class="card" style="text-align:center;border-top:4px solid #e74c3c">
+          <div style="font-size:2.5rem;margin-bottom:.75rem">🔥</div>
+          <h4>Fire Department</h4>
+          <a href="tel:911" style="font-size:1.4rem;font-weight:700;color:#e74c3c">911</a>
+        </div>
+        <div class="card" style="text-align:center;border-top:4px solid var(--clr-primary)">
+          <div style="font-size:2.5rem;margin-bottom:.75rem">🧠</div>
+          <h4>Mental Health Crisis</h4>
+          <a href="tel:988" style="font-size:1.4rem;font-weight:700;color:var(--clr-primary)">988</a>
+        </div>
+        <div class="card" style="text-align:center;border-top:4px solid var(--clr-green)">
+          <div style="font-size:2.5rem;margin-bottom:.75rem">☎️</div>
+          <h4>Poison Control</h4>
+          <a href="tel:18002221222" style="font-size:1.2rem;font-weight:700;color:var(--clr-green)">1-800-222-1222</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- CO2: Semantic — <footer> -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>🏥 MediConnect</h4>
+      <p>Your trusted healthcare management platform. Find hospitals, book appointments, and manage your health records securely.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="hospitals.html">Find Hospitals</a></li>
+        <li><a href="appointment.html">Book Appointment</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Patient Services</h4>
+      <ul>
+        <li><a href="reports.html">Medical Reports</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="login.html">Patient Login</a></li>
+        <li><a href="#health-tips">Health Tips</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Emergency</h4>
+      <ul>
+        <li><a href="tel:911">🚑 Ambulance: 911</a></li>
+        <li><a href="tel:988">🧠 Crisis Line: 988</a></li>
+        <li><a href="tel:18002221222">☎️ Poison Control</a></li>
+        <li><a href="hospitals.html">🏥 Find ER Near Me</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 MediConnect. Patient Appointment Management System. Built with HTML5, CSS3 & Vanilla JS.</p>
+    <p>⚠️ For educational purposes only. Not a real medical service.</p>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  // CO3: Functions, Arrays, DOM Manipulation
+  const HEALTH_TIPS = [
+    { icon:'💧', title:'Stay Hydrated', tip:'Drink at least 8 glasses of water daily to keep your body functioning optimally and flush out toxins.' },
+    { icon:'🏃', title:'Exercise Daily', tip:'30 minutes of moderate exercise daily reduces risk of heart disease, diabetes, and improves mental health.' },
+    { icon:'😴', title:'Sleep 7-9 Hours', tip:'Quality sleep is essential for immune function, memory consolidation, and hormone regulation.' },
+    { icon:'🥗', title:'Eat Balanced Meals', tip:'Include fruits, vegetables, whole grains, and lean proteins in every meal for optimal nutrition.' },
+    { icon:'🧘', title:'Manage Stress', tip:'Practice mindfulness, meditation, or deep breathing to reduce cortisol levels and anxiety.' },
+    { icon:'🦷', title:'Oral Hygiene', tip:'Brush twice and floss daily. Poor oral health is linked to heart disease and diabetes.' }
+  ];
+
+  // CO3: Array map method, DOM manipulation
+  document.getElementById('healthTipsGrid').innerHTML = HEALTH_TIPS.map(t => `
+    <div class="tip-card">
+      <div class="tip-icon">${t.icon}</div>
+      <h4>${t.title}</h4>
+      <p>${t.tip}</p>
+    </div>
+  `).join('');
+</script>
+</body>
+</html>
