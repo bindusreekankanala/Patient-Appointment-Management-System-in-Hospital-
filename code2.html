@@ -1,0 +1,2571 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<!--
+=======================================================================
+  PROJECT   : Patient Appointment Management System in Hospital
+  TECH STACK: HTML5 + CSS3 + Vanilla JavaScript (No frameworks)
+  AUTHOR    : Final Year Web Development Project
+  FILE      : index.html  (self-contained, run via Live Server or browser)
+=======================================================================
+-->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- CO5: SEO meta tags -->
+  <meta name="description" content="MediCare+ — Book hospital appointments, find doctors, manage health records and more."/>
+  <meta name="keywords"    content="hospital, appointment, doctor, patient, health, booking"/>
+  <meta name="author"      content="MediCare+ Team"/>
+  <title>MediCare+ | Patient Appointment Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+  <style>
+/* =====================================================================
+   SECTION 1 — CSS CUSTOM PROPERTIES  (CO2: CSS custom properties)
+===================================================================== */
+:root {
+  --bg:          #eef3fa;
+  --surface:     #ffffff;
+  --surface2:    #e4ecf7;
+  --border:      #ccd8ec;
+  --primary:     #1060a8;
+  --primary-dk:  #0a4a84;
+  --accent:      #00bfa5;
+  --accent-dk:   #009688;
+  --danger:      #e53935;
+  --warn:        #fb8c00;
+  --success:     #2e7d32;
+  --txt:         #12243a;
+  --txt-m:       #516175;
+  --txt-inv:     #ffffff;
+  --shadow:      0 4px 20px rgba(16,96,168,.12);
+  --shadow-lg:   0 10px 40px rgba(16,96,168,.18);
+  --r-sm: 8px; --r-md: 14px; --r-lg: 22px; --r-full: 999px;
+  --t: .24s cubic-bezier(.4,0,.2,1);
+  --font-h: 'Syne',     sans-serif;
+  --font-b: 'DM Sans',  sans-serif;
+  --hdr: 66px;
+}
+[data-theme="dark"] {
+  --bg:        #0c1929;
+  --surface:   #122136;
+  --surface2:  #1a3050;
+  --border:    #254568;
+  --txt:       #ddeeff;
+  --txt-m:     #7ba0c0;
+  --shadow:    0 4px 20px rgba(0,0,0,.4);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,.55);
+}
+
+/* =====================================================================
+   SECTION 2 — RESET & BASE  (CO1: HTML structure, typography)
+===================================================================== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-b);background:var(--bg);color:var(--txt);
+  transition:background var(--t),color var(--t);min-height:100vh;
+}
+img{max-width:100%;display:block}
+a{color:var(--primary);text-decoration:none}
+ul{list-style:none}
+button{cursor:pointer;font-family:var(--font-b);border:none;outline:none;background:none}
+input,select,textarea{
+  font-family:var(--font-b);font-size:.93rem;
+  background:var(--surface);color:var(--txt);
+  border:1.5px solid var(--border);border-radius:var(--r-sm);
+  padding:.58rem .85rem;width:100%;
+  transition:border-color var(--t),box-shadow var(--t),background var(--t);
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--primary);
+  box-shadow:0 0 0 3px rgba(16,96,168,.14);
+}
+textarea{resize:vertical;min-height:80px}
+label{display:block;font-weight:500;margin-bottom:.3rem;font-size:.88rem;color:var(--txt-m)}
+h1,h2,h3,h4,h5{font-family:var(--font-h);line-height:1.2}
+p{line-height:1.72;color:var(--txt-m)}
+.hidden{display:none!important}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+
+/* =====================================================================
+   SECTION 3 — UTILITY CLASSES
+===================================================================== */
+.container{max-width:1160px;margin:0 auto;padding:0 20px}
+.flex{display:flex;align-items:center}
+.gap-sm{gap:.5rem} .gap-md{gap:1rem} .gap-lg{gap:1.5rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem}
+.text-c{text-align:center}
+.mt-sm{margin-top:.5rem} .mt-md{margin-top:1rem} .mt-lg{margin-top:1.5rem}
+.mb-sm{margin-bottom:.5rem} .mb-md{margin-bottom:1rem} .mb-lg{margin-bottom:1.5rem}
+.badge{
+  display:inline-flex;align-items:center;gap:.3rem;
+  padding:.2rem .7rem;border-radius:var(--r-full);font-size:.78rem;font-weight:600;
+}
+.badge-primary{background:rgba(16,96,168,.12);color:var(--primary)}
+.badge-success{background:rgba(46,125,50,.12);color:var(--success)}
+.badge-warn{background:rgba(251,140,0,.12);color:var(--warn)}
+.badge-danger{background:rgba(229,57,53,.12);color:var(--danger)}
+.tag{
+  display:inline-block;padding:.15rem .55rem;border-radius:var(--r-full);
+  font-size:.75rem;font-weight:600;background:var(--surface2);color:var(--txt-m);
+}
+
+/* =====================================================================
+   SECTION 4 — BUTTONS  (CO1: margin/padding/border)
+===================================================================== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.4rem;
+  padding:.6rem 1.4rem;border-radius:var(--r-full);font-weight:600;font-size:.9rem;
+  transition:all var(--t);letter-spacing:.01em;
+}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dk);box-shadow:var(--shadow)}
+.btn-accent{background:var(--accent);color:#fff}
+.btn-accent:hover{background:var(--accent-dk);box-shadow:var(--shadow)}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.btn-outline:hover{background:var(--primary);color:#fff}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-danger:hover{filter:brightness(1.1)}
+.btn-sm{padding:.4rem 1rem;font-size:.82rem}
+.btn-lg{padding:.8rem 2rem;font-size:1rem}
+.btn-block{width:100%;display:flex}
+
+/* =====================================================================
+   SECTION 5 — CARD  (CO1: border, shadow)
+===================================================================== */
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:1.4rem;
+  box-shadow:var(--shadow);transition:box-shadow var(--t),transform var(--t);
+}
+.card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.card-title{font-size:1.05rem;font-weight:700;margin-bottom:.8rem}
+.section-header{margin-bottom:1.8rem}
+.section-header h2{font-size:1.75rem;margin-bottom:.3rem}
+.section-header p{font-size:.95rem}
+
+/* =====================================================================
+   SECTION 6 — HEADER / NAVBAR  (CO2: semantic tags)
+===================================================================== */
+header#main-header{
+  position:fixed;top:0;left:0;right:0;height:var(--hdr);
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;z-index:900;
+  box-shadow:0 2px 12px rgba(16,96,168,.08);
+  transition:background var(--t);
+}
+header#main-header .container{display:flex;align-items:center;justify-content:space-between;width:100%}
+.logo{display:flex;align-items:center;gap:.5rem;font-family:var(--font-h);font-size:1.3rem;font-weight:800;color:var(--primary)}
+.logo span{color:var(--accent)}
+nav ul{display:flex;gap:.2rem}
+nav ul li a{
+  padding:.4rem .75rem;border-radius:var(--r-full);font-size:.88rem;font-weight:500;
+  color:var(--txt-m);transition:all var(--t);
+}
+nav ul li a:hover,nav ul li a.active{color:var(--primary);background:rgba(16,96,168,.1)}
+.nav-actions{display:flex;align-items:center;gap:.6rem}
+.dark-toggle{
+  width:40px;height:40px;border-radius:50%;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  transition:background var(--t),transform var(--t);
+}
+.dark-toggle:hover{background:var(--border);transform:rotate(20deg)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:6px}
+.hamburger span{display:block;width:24px;height:2px;background:var(--txt);border-radius:2px;transition:all var(--t)}
+
+/* =====================================================================
+   SECTION 7 — PAGE SYSTEM (SPA routing)
+===================================================================== */
+.page{display:none;padding-top:calc(var(--hdr) + 24px);min-height:100vh;padding-bottom:60px}
+.page.active{display:block;animation:fadeUp .35s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* =====================================================================
+   SECTION 8 — HOME / LANDING PAGE  (CO2: grid, flexbox)
+===================================================================== */
+.hero{
+  background:linear-gradient(135deg,var(--primary) 0%,#1a7fd4 55%,var(--accent) 100%);
+  border-radius:var(--r-lg);padding:64px 48px;margin-bottom:2.5rem;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:300px;height:300px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+.hero::after{
+  content:'';position:absolute;bottom:-60px;right:100px;
+  width:200px;height:200px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
+.hero-content{position:relative;z-index:1;max-width:560px}
+.hero-content h1{font-size:2.6rem;color:#fff;margin-bottom:1rem;line-height:1.15}
+.hero-content p{color:rgba(255,255,255,.85);font-size:1.05rem;margin-bottom:1.6rem}
+.hero-content .flex{flex-wrap:wrap;gap:.8rem}
+.hero-stats{
+  display:flex;gap:2rem;margin-top:2rem;
+  padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.2)
+}
+.hero-stat .num{font-family:var(--font-h);font-size:1.8rem;font-weight:800;color:#fff}
+.hero-stat .lbl{font-size:.8rem;color:rgba(255,255,255,.75)}
+.quick-search{
+  background:var(--surface);border-radius:var(--r-lg);
+  padding:1.6rem;margin-bottom:2.5rem;
+  box-shadow:var(--shadow-lg);border:1px solid var(--border);
+}
+.quick-search h3{font-size:1.1rem;margin-bottom:1rem}
+.search-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.8rem;align-items:end}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;margin-bottom:2.5rem}
+.feature-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:1.4rem;text-align:center;cursor:pointer;
+  transition:all var(--t);position:relative;overflow:hidden;
+}
+.feature-card::before{
+  content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--primary),var(--accent));
+  opacity:0;transition:opacity var(--t);
+}
+.feature-card:hover::before{opacity:.06}
+.feature-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+.feature-card .icon{font-size:2.2rem;margin-bottom:.7rem;display:block}
+.feature-card h4{font-size:.95rem;margin-bottom:.3rem}
+.feature-card p{font-size:.82rem}
+
+/* =====================================================================
+   SECTION 9 — AUTH (Login / Register)  (CO2: forms)
+===================================================================== */
+.auth-wrap{
+  max-width:460px;margin:0 auto;
+  background:var(--surface);border-radius:var(--r-lg);
+  padding:2.5rem;box-shadow:var(--shadow-lg);border:1px solid var(--border);
+}
+.auth-tabs{display:flex;gap:0;margin-bottom:2rem;border-radius:var(--r-full);overflow:hidden;border:1.5px solid var(--border)}
+.auth-tab{flex:1;padding:.55rem;text-align:center;font-weight:600;font-size:.9rem;color:var(--txt-m);transition:all var(--t);cursor:pointer}
+.auth-tab.active{background:var(--primary);color:#fff}
+.form-group{margin-bottom:1rem}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.form-error{color:var(--danger);font-size:.8rem;margin-top:.25rem;display:none}
+.form-error.show{display:block}
+.input-icon{position:relative}
+.input-icon input{padding-left:2.5rem}
+.input-icon .icon{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none}
+.strength-bar{height:4px;border-radius:2px;margin-top:.4rem;background:var(--border);overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;transition:width .4s,background .4s;width:0}
+.divider{text-align:center;position:relative;margin:1.2rem 0}
+.divider::before{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--border)}
+.divider span{position:relative;background:var(--surface);padding:0 .8rem;font-size:.82rem;color:var(--txt-m)}
+
+/* =====================================================================
+   SECTION 10 — DOCTORS
+===================================================================== */
+.doctors-filter{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}
+.filter-btn{padding:.35rem .9rem;border-radius:var(--r-full);font-size:.83rem;font-weight:600;border:1.5px solid var(--border);color:var(--txt-m);transition:all var(--t)}
+.filter-btn.active,.filter-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(16,96,168,.08)}
+.doctors-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.2rem}
+.doctor-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  overflow:hidden;transition:all var(--t);cursor:pointer;
+}
+.doctor-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--primary)}
+.doctor-card-top{background:linear-gradient(135deg,var(--primary),#1a7fd4);padding:1.2rem;text-align:center}
+.doctor-avatar{
+  width:72px;height:72px;border-radius:50%;border:3px solid rgba(255,255,255,.5);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;margin:0 auto .6rem;background:rgba(255,255,255,.2);
+}
+.doctor-card-top h4{color:#fff;font-size:1rem;margin-bottom:.2rem}
+.doctor-card-top .spec{color:rgba(255,255,255,.8);font-size:.82rem}
+.doctor-card-body{padding:1rem}
+.doctor-meta{display:flex;justify-content:space-between;margin-bottom:.8rem}
+.doctor-meta-item{text-align:center;font-size:.82rem;color:var(--txt-m)}
+.doctor-meta-item strong{display:block;font-size:1rem;color:var(--txt)}
+.stars{color:#f59e0b;letter-spacing:.05rem}
+.avail-slots{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.8rem}
+.slot{padding:.2rem .55rem;border-radius:var(--r-full);font-size:.75rem;border:1px solid var(--accent);color:var(--accent);cursor:pointer;transition:all var(--t)}
+.slot:hover,.slot.selected{background:var(--accent);color:#fff}
+
+/* =====================================================================
+   SECTION 11 — APPOINTMENT BOOKING
+===================================================================== */
+.booking-stepper{display:flex;justify-content:center;gap:0;margin-bottom:2rem}
+.step{
+  display:flex;align-items:center;gap:.4rem;padding:.45rem 1rem;
+  font-size:.82rem;font-weight:600;color:var(--txt-m);
+  transition:all var(--t);position:relative;
+}
+.step::after{content:'›';position:absolute;right:-4px;font-size:1rem;color:var(--border)}
+.step:last-child::after{display:none}
+.step .step-n{
+  width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:var(--border);color:var(--txt-m);font-size:.8rem;font-weight:700;transition:all var(--t);
+}
+.step.active .step-n{background:var(--primary);color:#fff}
+.step.done .step-n{background:var(--success);color:#fff}
+.step.active,.step.done{color:var(--txt)}
+.booking-form-section{display:none}
+.booking-form-section.active{display:block;animation:fadeUp .3s ease}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.4rem;margin:1rem 0}
+.cal-day{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  border-radius:var(--r-sm);font-size:.85rem;cursor:pointer;
+  border:1px solid var(--border);transition:all var(--t);
+}
+.cal-day:hover{border-color:var(--primary);color:var(--primary)}
+.cal-day.selected{background:var(--primary);color:#fff;border-color:var(--primary)}
+.cal-day.today{font-weight:700;border-color:var(--accent);color:var(--accent)}
+.cal-day.disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+.time-slots{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.time-slot{padding:.35rem .85rem;border-radius:var(--r-full);font-size:.83rem;border:1.5px solid var(--border);cursor:pointer;transition:all var(--t)}
+.time-slot:hover{border-color:var(--primary);color:var(--primary)}
+.time-slot.selected{background:var(--primary);color:#fff;border-color:var(--primary)}
+.booking-summary{background:var(--surface2);border-radius:var(--r-md);padding:1.2rem;margin-top:1rem}
+.booking-summary .row{display:flex;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.booking-summary .row:last-child{border:none;font-weight:700}
+
+/* =====================================================================
+   SECTION 12 — DASHBOARD
+===================================================================== */
+.dashboard-grid{display:grid;grid-template-columns:260px 1fr;gap:1.5rem}
+.dash-sidebar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem;height:fit-content}
+.dash-user{text-align:center;padding-bottom:1rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.dash-avatar{
+  width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+  margin:0 auto .7rem;
+}
+.dash-menu a{
+  display:flex;align-items:center;gap:.6rem;padding:.5rem .7rem;
+  border-radius:var(--r-sm);font-size:.88rem;color:var(--txt-m);
+  transition:all var(--t);margin-bottom:.2rem;
+}
+.dash-menu a:hover,.dash-menu a.active{background:rgba(16,96,168,.1);color:var(--primary)}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:1rem;display:flex;align-items:center;gap:.9rem;
+}
+.stat-icon{font-size:1.8rem;flex-shrink:0}
+.stat-val{font-family:var(--font-h);font-size:1.6rem;font-weight:800;line-height:1}
+.stat-lbl{font-size:.78rem;color:var(--txt-m);margin-top:.2rem}
+.appointments-table{width:100%;border-collapse:collapse;font-size:.88rem}
+.appointments-table th{text-align:left;padding:.6rem .8rem;background:var(--surface2);color:var(--txt-m);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.appointments-table td{padding:.65rem .8rem;border-bottom:1px solid var(--border)}
+.appointments-table tr:hover td{background:var(--surface2)}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:.3rem}
+.progress-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width 1s ease}
+
+/* =====================================================================
+   SECTION 13 — HOSPITAL FINDER / MAP
+===================================================================== */
+.map-wrap{
+  background:var(--surface2);border-radius:var(--r-lg);
+  overflow:hidden;border:1px solid var(--border);margin-bottom:1.5rem;
+  position:relative;
+}
+#map-canvas{width:100%;height:400px;font-size:.85rem}
+.map-overlay{
+  position:absolute;top:12px;left:12px;right:12px;z-index:10;
+  background:var(--surface);border-radius:var(--r-md);padding:.8rem;
+  box-shadow:var(--shadow);display:flex;gap:.6rem;
+}
+.map-overlay input{flex:1;border-radius:var(--r-full);padding:.5rem 1rem}
+.hospitals-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.hospital-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:1.1rem;transition:all var(--t);
+}
+.hospital-card:hover{border-color:var(--primary);box-shadow:var(--shadow)}
+.hospital-card h4{font-size:.97rem;margin-bottom:.35rem}
+.hospital-info{display:flex;flex-direction:column;gap:.25rem;font-size:.83rem;color:var(--txt-m)}
+.hospital-info span{display:flex;align-items:center;gap:.4rem}
+
+/* =====================================================================
+   SECTION 14 — MEDICAL REPORTS
+===================================================================== */
+.upload-zone{
+  border:2.5px dashed var(--border);border-radius:var(--r-lg);
+  padding:3rem 2rem;text-align:center;cursor:pointer;
+  transition:all var(--t);margin-bottom:1.5rem;
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--primary);background:rgba(16,96,168,.04)}
+.upload-zone .icon{font-size:2.8rem;margin-bottom:.8rem;display:block}
+.upload-zone p{font-size:.95rem;margin-bottom:.5rem}
+.upload-zone small{font-size:.8rem}
+#fileInput{display:none}
+.reports-list{display:flex;flex-direction:column;gap:.75rem}
+.report-item{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;transition:all var(--t);
+}
+.report-item:hover{border-color:var(--primary)}
+.report-icon{font-size:1.8rem;flex-shrink:0}
+.report-info{flex:1}
+.report-info h5{font-size:.92rem;margin-bottom:.15rem}
+.report-info small{font-size:.78rem;color:var(--txt-m)}
+
+/* =====================================================================
+   SECTION 15 — REVIEWS & RATINGS
+===================================================================== */
+.review-summary{background:linear-gradient(135deg,var(--primary),#1a7fd4);color:#fff;border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem;display:flex;gap:2rem;align-items:center}
+.review-big-num{font-family:var(--font-h);font-size:3.5rem;font-weight:800;line-height:1}
+.rating-bars{flex:1}
+.rating-bar-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;font-size:.83rem}
+.rating-bar-track{flex:1;height:6px;background:rgba(255,255,255,.25);border-radius:3px;overflow:hidden}
+.rating-bar-fill{height:100%;background:#fff;border-radius:3px}
+.review-cards{display:flex;flex-direction:column;gap:1rem}
+.review-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:1.1rem;transition:all var(--t);
+}
+.review-card:hover{border-color:var(--accent)}
+.review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem}
+.reviewer{display:flex;align-items:center;gap:.6rem}
+.reviewer-av{
+  width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));
+  display:flex;align-items:center;justify-content:center;color:#fff;font-size:.85rem;font-weight:700;
+}
+.star-select{display:flex;gap:.2rem;font-size:1.4rem;cursor:pointer}
+.star-select span{transition:transform var(--t);color:var(--border)}
+.star-select span:hover,.star-select span.lit{color:#f59e0b;transform:scale(1.2)}
+
+/* =====================================================================
+   SECTION 16 — HEALTH TIPS
+===================================================================== */
+.tips-hero{
+  background:linear-gradient(135deg,var(--accent) 0%,#00897b 100%);
+  border-radius:var(--r-lg);padding:2.5rem;margin-bottom:2rem;text-align:center;
+}
+.tips-hero h2{color:#fff;font-size:1.8rem;margin-bottom:.5rem}
+.tips-hero p{color:rgba(255,255,255,.85)}
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+.tip-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  overflow:hidden;transition:all var(--t);
+}
+.tip-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.tip-card-head{padding:1.1rem;background:var(--surface2);display:flex;align-items:center;gap:.7rem}
+.tip-card-head .icon{font-size:1.6rem}
+.tip-card-head h4{font-size:.95rem}
+.tip-card-body{padding:1rem}
+.tip-card-body p{font-size:.87rem}
+
+/* =====================================================================
+   SECTION 17 — EMERGENCY
+===================================================================== */
+.emergency-banner{
+  background:linear-gradient(135deg,#b71c1c,var(--danger));
+  border-radius:var(--r-lg);padding:2rem;margin-bottom:2rem;text-align:center;
+  animation:pulse-bg 2.5s ease infinite;
+}
+@keyframes pulse-bg{0%,100%{filter:brightness(1)}50%{filter:brightness(1.08)}}
+.emergency-banner h2{color:#fff;font-size:2rem;margin-bottom:.5rem}
+.emergency-banner p{color:rgba(255,255,255,.9)}
+.emergency-number{
+  font-family:var(--font-h);font-size:3rem;font-weight:800;color:#fff;
+  display:block;margin:.8rem 0;letter-spacing:.05em;
+}
+.emergency-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
+.emergency-card{
+  background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);
+  padding:1.2rem;text-align:center;transition:all var(--t);
+}
+.emergency-card:hover{border-color:var(--danger);transform:translateY(-2px)}
+.emergency-card .icon{font-size:2rem;display:block;margin-bottom:.5rem}
+.emergency-card h4{font-size:.95rem;margin-bottom:.3rem}
+.emergency-card .phone{font-family:var(--font-h);font-size:1.25rem;color:var(--danger);font-weight:700}
+
+/* =====================================================================
+   SECTION 18 — REMINDERS
+===================================================================== */
+.reminder-form{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.5rem}
+.reminders-list{display:flex;flex-direction:column;gap:.75rem}
+.reminder-item{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;transition:all var(--t);
+}
+.reminder-item:hover{border-color:var(--primary)}
+.reminder-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.reminder-info{flex:1}
+.reminder-info h5{font-size:.92rem}
+.reminder-info small{font-size:.78rem;color:var(--txt-m)}
+
+/* =====================================================================
+   SECTION 19 — TOAST NOTIFICATIONS
+===================================================================== */
+#toast-container{position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:.5rem}
+.toast{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);
+  padding:.8rem 1.2rem;box-shadow:var(--shadow-lg);min-width:260px;
+  display:flex;align-items:center;gap:.7rem;font-size:.88rem;
+  animation:slideIn .3s ease;
+}
+.toast.hide{animation:slideOut .3s ease forwards}
+@keyframes slideIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes slideOut{to{transform:translateX(120%);opacity:0}}
+.toast-success{border-left:4px solid var(--success)}
+.toast-error{border-left:4px solid var(--danger)}
+.toast-info{border-left:4px solid var(--primary)}
+.toast-warn{border-left:4px solid var(--warn)}
+
+/* =====================================================================
+   SECTION 20 — MODAL
+===================================================================== */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:950;
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+  animation:fadeIn .2s ease;
+}
+.modal-overlay.hidden{display:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border-radius:var(--r-lg);padding:2rem;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+.modal-header h3{font-size:1.2rem}
+.modal-close{font-size:1.4rem;color:var(--txt-m);cursor:pointer;transition:color var(--t)}
+.modal-close:hover{color:var(--danger)}
+
+/* =====================================================================
+   SECTION 21 — FOOTER  (CO2: semantic tags)
+===================================================================== */
+footer#main-footer{
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:3rem 0 1.5rem;margin-top:4rem;
+}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+.footer-brand .logo{margin-bottom:.7rem}
+.footer-brand p{font-size:.85rem}
+.footer-col h5{font-size:.9rem;font-weight:700;margin-bottom:.8rem}
+.footer-col li{margin-bottom:.4rem}
+.footer-col li a{font-size:.85rem;color:var(--txt-m);transition:color var(--t)}
+.footer-col li a:hover{color:var(--primary)}
+.footer-bottom{text-align:center;font-size:.82rem;color:var(--txt-m);padding-top:1.5rem;border-top:1px solid var(--border)}
+
+/* =====================================================================
+   SECTION 22 — RESPONSIVE  (CO2: media queries)
+===================================================================== */
+@media(max-width:900px){
+  nav ul{display:none}
+  .hamburger{display:flex}
+  .mobile-nav{
+    position:fixed;top:var(--hdr);left:0;right:0;background:var(--surface);
+    border-bottom:1px solid var(--border);padding:1rem;z-index:890;
+    animation:slideDown .2s ease;
+  }
+  @keyframes slideDown{from{transform:translateY(-10px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .mobile-nav.hidden{display:none}
+  .mobile-nav ul{display:flex;flex-direction:column;gap:.3rem}
+  .mobile-nav ul li a{display:block;padding:.6rem .8rem;border-radius:var(--r-sm);font-size:.93rem}
+  .hero-content h1{font-size:1.9rem}
+  .hero{padding:40px 24px}
+  .search-row{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;gap:.6rem}
+  .search-row .btn{grid-column:1/-1}
+  .dashboard-grid{grid-template-columns:1fr}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:580px){
+  .hero-content h1{font-size:1.55rem}
+  .hero-stats{gap:1rem}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .booking-stepper{flex-wrap:wrap;justify-content:flex-start;gap:.4rem}
+  .step::after{display:none}
+  .review-summary{flex-direction:column;text-align:center}
+  .footer-grid{grid-template-columns:1fr}
+}
+
+/* =====================================================================
+   SECTION 23 — MISC ANIMATIONS  (CO2: transitions & animations)
+===================================================================== */
+@keyframes spin{to{transform:rotate(360deg)}}
+.spinner{width:20px;height:20px;border:2.5px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+@keyframes heartbeat{0%,100%{transform:scale(1)}14%{transform:scale(1.15)}28%{transform:scale(1)}42%{transform:scale(1.1)}70%{transform:scale(1)}}
+.pulse{animation:heartbeat 1.4s ease infinite}
+.shimmer{background:linear-gradient(90deg,var(--surface2) 25%,var(--border) 50%,var(--surface2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+  </style>
+</head>
+<body>
+
+<!-- ======================================================================
+     HEADER / NAVIGATION  (CO2: semantic nav, header)
+====================================================================== -->
+<header id="main-header">
+  <div class="container">
+    <div class="logo">🏥 MediCare<span>+</span></div>
+    <nav aria-label="Main navigation">
+      <ul id="nav-links">
+        <li><a href="#" class="nav-link active" data-page="home">🏠 Home</a></li>
+        <li><a href="#" class="nav-link" data-page="doctors">👨‍⚕️ Doctors</a></li>
+        <li><a href="#" class="nav-link" data-page="hospitals">🏨 Hospitals</a></li>
+        <li><a href="#" class="nav-link" data-page="booking">📅 Book</a></li>
+        <li><a href="#" class="nav-link" data-page="tips">💡 Health Tips</a></li>
+        <li><a href="#" class="nav-link" data-page="emergency">🚨 Emergency</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <button class="dark-toggle" id="darkToggle" title="Toggle Dark Mode" aria-label="Toggle dark mode">🌙</button>
+      <button class="btn btn-outline btn-sm" id="loginBtn" data-page="auth">Login</button>
+      <button class="btn btn-primary btn-sm hidden" id="dashBtn" data-page="dashboard">👤 Dashboard</button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Nav -->
+<nav class="mobile-nav hidden" id="mobileNav" aria-label="Mobile navigation">
+  <ul>
+    <li><a href="#" class="nav-link" data-page="home">🏠 Home</a></li>
+    <li><a href="#" class="nav-link" data-page="doctors">👨‍⚕️ Doctors</a></li>
+    <li><a href="#" class="nav-link" data-page="hospitals">🏨 Hospitals</a></li>
+    <li><a href="#" class="nav-link" data-page="booking">📅 Book Appointment</a></li>
+    <li><a href="#" class="nav-link" data-page="tips">💡 Health Tips</a></li>
+    <li><a href="#" class="nav-link" data-page="emergency">🚨 Emergency</a></li>
+    <li><a href="#" class="nav-link" data-page="auth">🔑 Login / Register</a></li>
+  </ul>
+</nav>
+
+<!-- ======================================================================
+     MAIN CONTENT (CO2: semantic main)
+====================================================================== -->
+<main id="app">
+
+  <!-- ================================================================
+       PAGE: HOME
+  ================================================================ -->
+  <section class="page active" id="page-home" aria-label="Home">
+    <div class="container">
+
+      <!-- Hero Section -->
+      <div class="hero">
+        <div class="hero-content">
+          <h1>Your Health, Our Priority 🩺</h1>
+          <p>Book appointments with top doctors, find nearby hospitals, manage records — all in one place.</p>
+          <div class="flex">
+            <button class="btn btn-accent btn-lg" data-page="booking">📅 Book Appointment</button>
+            <button class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff" data-page="doctors">Find a Doctor</button>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><div class="num">250+</div><div class="lbl">Doctors</div></div>
+            <div class="hero-stat"><div class="num">40+</div><div class="lbl">Hospitals</div></div>
+            <div class="hero-stat"><div class="num">18k+</div><div class="lbl">Patients</div></div>
+            <div class="hero-stat"><div class="num">4.8⭐</div><div class="lbl">Avg Rating</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Search -->
+      <div class="quick-search">
+        <h3>🔍 Find a Doctor Quickly</h3>
+        <div class="search-row">
+          <div class="form-group" style="margin:0">
+            <input type="text" id="qs-name" placeholder="Doctor name or specialty…"/>
+          </div>
+          <div class="form-group" style="margin:0">
+            <select id="qs-spec">
+              <option value="">All Specialties</option>
+              <option>Cardiology</option><option>Neurology</option><option>Orthopedics</option>
+              <option>Pediatrics</option><option>Dermatology</option><option>General Medicine</option>
+              <option>Gynecology</option><option>ENT</option><option>Ophthalmology</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0">
+            <select id="qs-city">
+              <option value="">All Cities</option>
+              <option>Mumbai</option><option>Delhi</option><option>Bangalore</option>
+              <option>Hyderabad</option><option>Chennai</option><option>Kolkata</option>
+            </select>
+          </div>
+          <button class="btn btn-primary" id="quickSearchBtn">Search</button>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="section-header"><h2>Our Services</h2><p>Everything you need for your healthcare journey</p></div>
+      <div class="features-grid">
+        <div class="feature-card" data-page="booking"><span class="icon">📅</span><h4>Book Appointment</h4><p>Schedule visits with specialists instantly</p></div>
+        <div class="feature-card" data-page="doctors"><span class="icon">👨‍⚕️</span><h4>Find Doctors</h4><p>Browse 250+ verified specialists</p></div>
+        <div class="feature-card" data-page="hospitals"><span class="icon">🏥</span><h4>Hospital Finder</h4><p>Locate hospitals near you via GPS</p></div>
+        <div class="feature-card" data-page="dashboard"><span class="icon">📊</span><h4>My Dashboard</h4><p>Manage appointments & health records</p></div>
+        <div class="feature-card" data-page="reports"><span class="icon">📋</span><h4>Medical Reports</h4><p>Upload and store your reports securely</p></div>
+        <div class="feature-card" data-page="reminders"><span class="icon">⏰</span><h4>Reminders</h4><p>Never miss a medication or appointment</p></div>
+        <div class="feature-card" data-page="reviews"><span class="icon">⭐</span><h4>Reviews</h4><p>Rate doctors and read patient feedback</p></div>
+        <div class="feature-card" data-page="tips"><span class="icon">💡</span><h4>Health Tips</h4><p>Daily wellness advice from experts</p></div>
+      </div>
+
+      <!-- How it works -->
+      <div class="section-header"><h2>How It Works</h2><p>Simple steps to get the care you need</p></div>
+      <div class="grid-4" style="margin-bottom:2rem">
+        <article class="card text-c">
+          <div style="font-size:2rem;margin-bottom:.6rem">📝</div>
+          <h4 style="margin-bottom:.4rem">1. Register</h4>
+          <p style="font-size:.83rem">Create your free patient account in minutes</p>
+        </article>
+        <article class="card text-c">
+          <div style="font-size:2rem;margin-bottom:.6rem">🔍</div>
+          <h4 style="margin-bottom:.4rem">2. Search</h4>
+          <p style="font-size:.83rem">Find doctors by specialty, location, or name</p>
+        </article>
+        <article class="card text-c">
+          <div style="font-size:2rem;margin-bottom:.6rem">📅</div>
+          <h4 style="margin-bottom:.4rem">3. Book</h4>
+          <p style="font-size:.83rem">Pick a date and time that works for you</p>
+        </article>
+        <article class="card text-c">
+          <div style="font-size:2rem;margin-bottom:.6rem">✅</div>
+          <h4 style="margin-bottom:.4rem">4. Confirm</h4>
+          <p style="font-size:.83rem">Get instant confirmation and reminders</p>
+        </article>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: AUTH (Login / Register)  (CO2: HTML Forms, inputs)
+  ================================================================ -->
+  <section class="page" id="page-auth" aria-label="Authentication">
+    <div class="container">
+      <div class="auth-wrap">
+        <div class="text-c mb-lg">
+          <div style="font-size:2.5rem;margin-bottom:.5rem">🏥</div>
+          <h2 style="font-size:1.5rem">Welcome to MediCare+</h2>
+          <p style="font-size:.88rem">Your trusted healthcare companion</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tabLogin">Login</div>
+          <div class="auth-tab" id="tabRegister">Register</div>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" novalidate>
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-icon">
+              <span class="icon">📧</span>
+              <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required/>
+            </div>
+            <div class="form-error" id="loginEmailErr">Please enter a valid email.</div>
+          </div>
+          <div class="form-group">
+            <label for="loginPass">Password</label>
+            <div class="input-icon">
+              <span class="icon">🔒</span>
+              <input type="password" id="loginPass" placeholder="Your password" required/>
+            </div>
+            <div class="form-error" id="loginPassErr">Password is required.</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-md">Login →</button>
+          <div class="divider"><span>or continue as</span></div>
+          <button type="button" class="btn btn-outline btn-block" id="guestBtn">👤 Continue as Guest</button>
+        </form>
+
+        <!-- REGISTER FORM -->
+        <form id="registerForm" class="hidden" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regFirst">First Name</label>
+              <input type="text" id="regFirst" placeholder="John" required/>
+              <div class="form-error" id="regFirstErr">Required.</div>
+            </div>
+            <div class="form-group">
+              <label for="regLast">Last Name</label>
+              <input type="text" id="regLast" placeholder="Doe" required/>
+              <div class="form-error" id="regLastErr">Required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <div class="input-icon">
+              <span class="icon">📧</span>
+              <input type="email" id="regEmail" placeholder="you@example.com" required/>
+            </div>
+            <div class="form-error" id="regEmailErr">Enter a valid email.</div>
+          </div>
+          <div class="form-group">
+            <label for="regPhone">Phone Number</label>
+            <input type="tel" id="regPhone" placeholder="+91 9876543210" pattern="[0-9+\s\-]{7,15}" required/>
+            <div class="form-error" id="regPhoneErr">Enter a valid phone number.</div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="regDOB">Date of Birth</label>
+              <input type="date" id="regDOB" required/>
+              <div class="form-error" id="regDOBErr">Required.</div>
+            </div>
+            <div class="form-group">
+              <label for="regGender">Gender</label>
+              <select id="regGender" required>
+                <option value="">Select…</option>
+                <option>Male</option><option>Female</option><option>Other</option>
+              </select>
+              <div class="form-error" id="regGenderErr">Required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="regPass">Password</label>
+            <div class="input-icon">
+              <span class="icon">🔒</span>
+              <input type="password" id="regPass" placeholder="Min 8 characters" required/>
+            </div>
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <div id="strengthLabel" style="font-size:.75rem;color:var(--txt-m);margin-top:.25rem"></div>
+            <div class="form-error" id="regPassErr">Min 8 characters required.</div>
+          </div>
+          <div class="form-group">
+            <label for="regPass2">Confirm Password</label>
+            <div class="input-icon">
+              <span class="icon">🔒</span>
+              <input type="password" id="regPass2" placeholder="Repeat password" required/>
+            </div>
+            <div class="form-error" id="regPass2Err">Passwords do not match.</div>
+          </div>
+          <div class="form-group">
+            <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.85rem;color:var(--txt)">
+              <input type="checkbox" id="termsChk" style="width:auto" required/>
+              I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+            </label>
+            <div class="form-error" id="termsErr">You must agree to the terms.</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg mt-md">Create Account →</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: DOCTORS  (CO3: Arrays, Objects, loops)
+  ================================================================ -->
+  <section class="page" id="page-doctors" aria-label="Find Doctors">
+    <div class="container">
+      <div class="section-header">
+        <h2>👨‍⚕️ Our Doctors</h2>
+        <p>Browse our team of 250+ verified medical specialists</p>
+      </div>
+
+      <!-- Search & Filter -->
+      <div style="display:flex;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap">
+        <input type="text" id="docSearch" placeholder="🔍 Search by name or specialty…" style="max-width:320px"/>
+        <select id="docFilter" style="max-width:200px">
+          <option value="">All Specialties</option>
+          <option>Cardiology</option><option>Neurology</option><option>Orthopedics</option>
+          <option>Pediatrics</option><option>Dermatology</option><option>General Medicine</option>
+          <option>Gynecology</option><option>ENT</option><option>Ophthalmology</option>
+        </select>
+      </div>
+      <div class="doctors-filter" id="specialtyFilters">
+        <button class="filter-btn active" data-spec="all">🏥 All</button>
+        <button class="filter-btn" data-spec="Cardiology">❤️ Cardiology</button>
+        <button class="filter-btn" data-spec="Neurology">🧠 Neurology</button>
+        <button class="filter-btn" data-spec="Orthopedics">🦴 Orthopedics</button>
+        <button class="filter-btn" data-spec="Pediatrics">👶 Pediatrics</button>
+        <button class="filter-btn" data-spec="Dermatology">🧴 Dermatology</button>
+        <button class="filter-btn" data-spec="General Medicine">💊 General</button>
+        <button class="filter-btn" data-spec="Gynecology">🌸 Gynecology</button>
+        <button class="filter-btn" data-spec="ENT">👂 ENT</button>
+      </div>
+      <div class="doctors-grid" id="doctorsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: HOSPITALS / MAP  (CO5: Geolocation API)
+  ================================================================ -->
+  <section class="page" id="page-hospitals" aria-label="Hospital Finder">
+    <div class="container">
+      <div class="section-header">
+        <h2>🏥 Hospital Finder</h2>
+        <p>Find hospitals near you using your location</p>
+      </div>
+      <div class="map-wrap">
+        <div class="map-overlay">
+          <input type="text" id="mapSearch" placeholder="Search hospital or city…"/>
+          <button class="btn btn-primary btn-sm" id="mapSearchBtn">Search</button>
+          <button class="btn btn-outline btn-sm" id="locateBtn">📍 My Location</button>
+        </div>
+        <div id="map-canvas">
+          <!-- Simulated map using CSS/HTML -->
+          <div id="mapSimulated" style="width:100%;height:400px;background:linear-gradient(135deg,#e8f4f8 0%,#d1e8f5 50%,#c4e0f0 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <div id="mapPins" style="position:absolute;inset:0"></div>
+            <div id="mapStatus" style="font-size:1rem;color:var(--primary);font-weight:600;z-index:1">📍 Click "My Location" to find nearby hospitals</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-header mt-lg"><h3>🔎 Search Results</h3><p id="hospitalCount">Showing all hospitals</p></div>
+      <div class="hospitals-list" id="hospitalsList"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: BOOKING  (CO4: DOM manipulation, localStorage)
+  ================================================================ -->
+  <section class="page" id="page-booking" aria-label="Book Appointment">
+    <div class="container" style="max-width:720px">
+      <div class="section-header text-c">
+        <h2>📅 Book an Appointment</h2>
+        <p>Quick, easy, confirmed in seconds</p>
+      </div>
+
+      <!-- Stepper -->
+      <div class="booking-stepper">
+        <div class="step active" data-step="1"><div class="step-n">1</div><span>Doctor</span></div>
+        <div class="step" data-step="2"><div class="step-n">2</div><span>Date & Time</span></div>
+        <div class="step" data-step="3"><div class="step-n">3</div><span>Details</span></div>
+        <div class="step" data-step="4"><div class="step-n">4</div><span>Confirm</span></div>
+      </div>
+
+      <!-- Step 1: Select Doctor -->
+      <div class="booking-form-section active card" id="bookStep1">
+        <h3 style="margin-bottom:1rem">Select a Doctor</h3>
+        <div class="form-group">
+          <label for="bookSpec">Specialty</label>
+          <select id="bookSpec">
+            <option value="">— Select specialty —</option>
+            <option>Cardiology</option><option>Neurology</option><option>Orthopedics</option>
+            <option>Pediatrics</option><option>Dermatology</option><option>General Medicine</option>
+            <option>Gynecology</option><option>ENT</option><option>Ophthalmology</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="bookDoc">Doctor</label>
+          <select id="bookDoc">
+            <option value="">— Select specialty first —</option>
+          </select>
+        </div>
+        <div id="selectedDoctorPreview" class="hidden" style="background:var(--surface2);border-radius:var(--r-md);padding:1rem;margin-top:.8rem;display:flex;align-items:center;gap:1rem">
+          <div style="font-size:2.5rem" id="sdpAvatar">👨‍⚕️</div>
+          <div>
+            <div id="sdpName" style="font-weight:700"></div>
+            <div id="sdpSpec" style="font-size:.83rem;color:var(--txt-m)"></div>
+            <div id="sdpExp" style="font-size:.83rem;color:var(--txt-m)"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:1.2rem">
+          <button class="btn btn-primary" id="step1Next">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Date & Time -->
+      <div class="booking-form-section card" id="bookStep2">
+        <h3 style="margin-bottom:.8rem">Choose Date & Time</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem">
+          <button class="btn btn-outline btn-sm" id="prevMonth">‹ Prev</button>
+          <span id="calMonthLabel" style="font-weight:700;font-family:var(--font-h)"></span>
+          <button class="btn btn-outline btn-sm" id="nextMonth">Next ›</button>
+        </div>
+        <div class="calendar-grid" id="calHeader" style="font-size:.78rem;font-weight:700;color:var(--txt-m);padding-bottom:.3rem">
+          <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div class="calendar-grid" id="calGrid"></div>
+        <div class="form-group mt-md">
+          <label>Available Time Slots</label>
+          <div class="time-slots" id="timeSlots"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:1.2rem">
+          <button class="btn btn-outline" id="step2Back">← Back</button>
+          <button class="btn btn-primary" id="step2Next">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Patient Details -->
+      <div class="booking-form-section card" id="bookStep3">
+        <h3 style="margin-bottom:1rem">Your Details</h3>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pName">Full Name</label>
+            <input type="text" id="pName" placeholder="Your full name" required/>
+            <div class="form-error" id="pNameErr">Name is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="pAge">Age</label>
+            <input type="number" id="pAge" placeholder="Age" min="1" max="120" required/>
+            <div class="form-error" id="pAgeErr">Valid age required.</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="pPhone">Phone</label>
+            <input type="tel" id="pPhone" placeholder="+91 9876543210" required/>
+            <div class="form-error" id="pPhoneErr">Phone required.</div>
+          </div>
+          <div class="form-group">
+            <label for="pEmail">Email</label>
+            <input type="email" id="pEmail" placeholder="you@example.com" required/>
+            <div class="form-error" id="pEmailErr">Valid email required.</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="pSymptoms">Symptoms / Reason for Visit</label>
+          <textarea id="pSymptoms" placeholder="Describe your symptoms briefly…"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="pType">Appointment Type</label>
+          <select id="pType">
+            <option>In-person Consultation</option>
+            <option>Video Consultation</option>
+            <option>Phone Consultation</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:1.2rem">
+          <button class="btn btn-outline" id="step3Back">← Back</button>
+          <button class="btn btn-primary" id="step3Next">Review →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Confirm -->
+      <div class="booking-form-section card" id="bookStep4">
+        <h3 style="margin-bottom:1rem">✅ Review & Confirm</h3>
+        <div class="booking-summary" id="bookingSummary"></div>
+        <div class="form-group mt-md">
+          <label for="payMethod">Payment Method</label>
+          <select id="payMethod">
+            <option>Pay at Hospital</option>
+            <option>Online – UPI</option>
+            <option>Online – Card</option>
+            <option>Insurance</option>
+          </select>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:1.2rem">
+          <button class="btn btn-outline" id="step4Back">← Back</button>
+          <button class="btn btn-accent btn-lg" id="confirmBooking">🎉 Confirm Booking</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: DASHBOARD  (CO4: localStorage)
+  ================================================================ -->
+  <section class="page" id="page-dashboard" aria-label="Patient Dashboard">
+    <div class="container">
+      <div class="dashboard-grid">
+        <!-- Sidebar -->
+        <aside class="dash-sidebar">
+          <div class="dash-user">
+            <div class="dash-avatar" id="dashAvatar">👤</div>
+            <div style="font-weight:700;font-size:1rem" id="dashName">Guest User</div>
+            <div style="font-size:.8rem;color:var(--txt-m)" id="dashEmail">–</div>
+            <div class="badge badge-success mt-sm">✅ Active Patient</div>
+          </div>
+          <nav class="dash-menu" aria-label="Dashboard navigation">
+            <a href="#" class="active" data-dash="overview">📊 Overview</a>
+            <a href="#" data-dash="appointments">📅 Appointments</a>
+            <a href="#" data-dash="reports">📋 Reports</a>
+            <a href="#" data-dash="reminders">⏰ Reminders</a>
+            <a href="#" data-dash="reviews">⭐ My Reviews</a>
+            <a href="#" data-dash="profile">👤 Profile</a>
+            <a href="#" id="logoutBtn" style="color:var(--danger)!important">🚪 Logout</a>
+          </nav>
+        </aside>
+
+        <!-- Main Dashboard Area -->
+        <div>
+          <!-- Stats Row -->
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-icon">📅</div>
+              <div><div class="stat-val" id="statAppt">0</div><div class="stat-lbl">Appointments</div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">📋</div>
+              <div><div class="stat-val" id="statReports">0</div><div class="stat-lbl">Reports</div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⏰</div>
+              <div><div class="stat-val" id="statReminders">0</div><div class="stat-lbl">Reminders</div></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">⭐</div>
+              <div><div class="stat-val" id="statReviews">0</div><div class="stat-lbl">Reviews</div></div>
+            </div>
+          </div>
+
+          <!-- Appointments Table -->
+          <div class="card mb-md">
+            <div class="card-title">📅 Upcoming Appointments</div>
+            <div style="overflow-x:auto">
+              <table class="appointments-table" id="dashApptTable">
+                <thead>
+                  <tr>
+                    <th>#</th><th>Doctor</th><th>Specialty</th><th>Date</th>
+                    <th>Time</th><th>Type</th><th>Status</th><th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="dashApptBody">
+                  <tr><td colspan="8" style="text-align:center;color:var(--txt-m);padding:2rem">No appointments yet. <a href="#" data-page="booking">Book one now →</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Health Progress -->
+          <div class="card">
+            <div class="card-title">💪 Health Goals Progress</div>
+            <div style="display:flex;flex-direction:column;gap:1rem">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:.3rem"><span>Daily Steps</span><span>7,200 / 10,000</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:.3rem"><span>Water Intake</span><span>1.8L / 2.5L</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:.3rem"><span>Sleep</span><span>6.5h / 8h</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:81%"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:.87rem;margin-bottom:.3rem"><span>Medications Taken</span><span>4 / 5</span></div>
+                <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: MEDICAL REPORTS  (CO4: DOM, File API)
+  ================================================================ -->
+  <section class="page" id="page-reports" aria-label="Medical Reports">
+    <div class="container" style="max-width:760px">
+      <div class="section-header">
+        <h2>📋 Medical Reports</h2>
+        <p>Securely upload and manage your medical documents</p>
+      </div>
+
+      <div class="upload-zone" id="uploadZone">
+        <span class="icon">📁</span>
+        <p>Drag & drop files here, or click to browse</p>
+        <small style="color:var(--txt-m)">Supports: PDF, JPG, PNG, DOCX (Max 10MB each)</small>
+        <input type="file" id="fileInput" multiple accept=".pdf,.jpg,.jpeg,.png,.docx"/>
+        <button class="btn btn-primary mt-md" onclick="document.getElementById('fileInput').click()">Choose Files</button>
+      </div>
+
+      <div class="card mb-md">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+          <div class="card-title" style="margin:0">My Reports (<span id="reportCount">0</span>)</div>
+          <select id="reportFilter" style="width:auto;font-size:.83rem;padding:.35rem .7rem">
+            <option>All Types</option><option>Blood Test</option><option>X-Ray</option>
+            <option>Prescription</option><option>Scan</option><option>Other</option>
+          </select>
+        </div>
+        <div class="reports-list" id="reportsList">
+          <div style="text-align:center;padding:2rem;color:var(--txt-m)">No reports uploaded yet.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: REVIEWS & RATINGS  (CO3: Objects, conditions)
+  ================================================================ -->
+  <section class="page" id="page-reviews" aria-label="Doctor Reviews">
+    <div class="container">
+      <div class="section-header">
+        <h2>⭐ Doctor Reviews & Ratings</h2>
+        <p>Real feedback from verified patients</p>
+      </div>
+
+      <!-- Overall Rating Summary -->
+      <div class="review-summary">
+        <div style="text-align:center;padding-right:1.5rem;border-right:1px solid rgba(255,255,255,.25)">
+          <div class="review-big-num">4.7</div>
+          <div class="stars" style="font-size:1.3rem">★★★★★</div>
+          <div style="font-size:.82rem;opacity:.8;margin-top:.3rem">Based on 1,248 reviews</div>
+        </div>
+        <div class="rating-bars" style="flex:1;padding-left:1.5rem">
+          <div class="rating-bar-row"><span style="width:20px">5⭐</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:72%"></div></div><span>72%</span></div>
+          <div class="rating-bar-row"><span style="width:20px">4⭐</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:18%"></div></div><span>18%</span></div>
+          <div class="rating-bar-row"><span style="width:20px">3⭐</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:6%"></div></div><span>6%</span></div>
+          <div class="rating-bar-row"><span style="width:20px">2⭐</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:2%"></div></div><span>2%</span></div>
+          <div class="rating-bar-row"><span style="width:20px">1⭐</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:2%"></div></div><span>2%</span></div>
+        </div>
+      </div>
+
+      <!-- Write Review -->
+      <div class="card mb-lg">
+        <div class="card-title">✍️ Write a Review</div>
+        <form id="reviewForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="revDoctor">Select Doctor</label>
+              <select id="revDoctor" required>
+                <option value="">— Select —</option>
+              </select>
+              <div class="form-error" id="revDoctorErr">Please select a doctor.</div>
+            </div>
+            <div class="form-group">
+              <label>Your Rating</label>
+              <div class="star-select" id="starSelect">
+                <span data-v="1">★</span><span data-v="2">★</span>
+                <span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+              </div>
+              <input type="hidden" id="revRating" value="0"/>
+              <div class="form-error" id="revRatingErr">Please select a rating.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="revTitle">Review Title</label>
+            <input type="text" id="revTitle" placeholder="Summary of your experience" required/>
+            <div class="form-error" id="revTitleErr">Title required.</div>
+          </div>
+          <div class="form-group">
+            <label for="revBody">Your Review</label>
+            <textarea id="revBody" placeholder="Share your detailed experience…" required></textarea>
+            <div class="form-error" id="revBodyErr">Review text required.</div>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+      </div>
+
+      <!-- Reviews List -->
+      <div class="section-header"><h3>Patient Reviews</h3></div>
+      <div class="review-cards" id="reviewsList"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: REMINDERS  (CO4: localStorage, async)
+  ================================================================ -->
+  <section class="page" id="page-reminders" aria-label="Appointment Reminders">
+    <div class="container" style="max-width:720px">
+      <div class="section-header">
+        <h2>⏰ Appointment Reminders</h2>
+        <p>Set reminders so you never miss a healthcare visit</p>
+      </div>
+
+      <div class="reminder-form card">
+        <div class="card-title">➕ Add New Reminder</div>
+        <form id="reminderForm" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="remTitle">Reminder Title</label>
+              <input type="text" id="remTitle" placeholder="e.g. Take Blood Pressure Medication" required/>
+              <div class="form-error" id="remTitleErr">Title required.</div>
+            </div>
+            <div class="form-group">
+              <label for="remType">Type</label>
+              <select id="remType">
+                <option>Appointment</option>
+                <option>Medication</option>
+                <option>Test / Checkup</option>
+                <option>Vaccine</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="remDate">Date</label>
+              <input type="date" id="remDate" required/>
+              <div class="form-error" id="remDateErr">Date required.</div>
+            </div>
+            <div class="form-group">
+              <label for="remTime">Time</label>
+              <input type="time" id="remTime" required/>
+              <div class="form-error" id="remTimeErr">Time required.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="remNote">Notes (optional)</label>
+            <input type="text" id="remNote" placeholder="Any extra details…"/>
+          </div>
+          <button type="submit" class="btn btn-primary">⏰ Set Reminder</button>
+        </form>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+        <h3>My Reminders (<span id="reminderCount">0</span>)</h3>
+        <button class="btn btn-outline btn-sm" id="clearReminders">🗑 Clear All</button>
+      </div>
+      <div class="reminders-list" id="remindersList">
+        <div style="text-align:center;padding:2rem;color:var(--txt-m)">No reminders set yet.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: HEALTH TIPS
+  ================================================================ -->
+  <section class="page" id="page-tips" aria-label="Health Tips">
+    <div class="container">
+      <div class="tips-hero">
+        <h2>💡 Daily Health Tips</h2>
+        <p>Expert-curated wellness advice to keep you at your best</p>
+      </div>
+
+      <!-- Tip of the Day -->
+      <div class="card mb-lg" id="tipOfDay" style="border-left:4px solid var(--accent)">
+        <div style="font-size:.78rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.5rem">✨ Tip of the Day</div>
+        <div id="todayTip" style="font-size:1.05rem;font-weight:500"></div>
+      </div>
+
+      <!-- Category Filter -->
+      <div class="doctors-filter" id="tipsFilter">
+        <button class="filter-btn active" data-cat="all">🏥 All Tips</button>
+        <button class="filter-btn" data-cat="nutrition">🥗 Nutrition</button>
+        <button class="filter-btn" data-cat="fitness">🏃 Fitness</button>
+        <button class="filter-btn" data-cat="mental">🧠 Mental Health</button>
+        <button class="filter-btn" data-cat="sleep">😴 Sleep</button>
+        <button class="filter-btn" data-cat="prevention">🛡️ Prevention</button>
+      </div>
+      <div class="tips-grid" id="tipsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       PAGE: EMERGENCY
+  ================================================================ -->
+  <section class="page" id="page-emergency" aria-label="Emergency Contacts">
+    <div class="container">
+      <div class="emergency-banner">
+        <h2>🚨 EMERGENCY SERVICES</h2>
+        <p>If you are experiencing a life-threatening emergency, call immediately:</p>
+        <span class="emergency-number pulse">📞 108</span>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+          <a href="tel:108" class="btn btn-danger btn-lg">Call 108 (Ambulance)</a>
+          <a href="tel:112" class="btn btn-outline btn-lg" style="border-color:#fff;color:#fff">Call 112 (Emergency)</a>
+        </div>
+      </div>
+
+      <div class="section-header"><h2>Emergency Contacts</h2></div>
+      <div class="emergency-grid" id="emergencyGrid"></div>
+
+      <!-- First Aid Guide -->
+      <div class="card mt-lg">
+        <div class="card-title">🩺 Quick First Aid Guide</div>
+        <div class="grid-2" style="margin-top:.8rem">
+          <article class="card" style="box-shadow:none;border-color:var(--border)">
+            <h4 style="margin-bottom:.5rem;color:var(--danger)">❤️ Cardiac Arrest</h4>
+            <ol style="padding-left:1.2rem;font-size:.87rem;color:var(--txt-m);line-height:2">
+              <li>Call 108 immediately</li>
+              <li>Start CPR: 30 chest compressions</li>
+              <li>Give 2 rescue breaths</li>
+              <li>Use AED if available</li>
+              <li>Continue until help arrives</li>
+            </ol>
+          </article>
+          <article class="card" style="box-shadow:none;border-color:var(--border)">
+            <h4 style="margin-bottom:.5rem;color:var(--warn)">🧠 Stroke (FAST)</h4>
+            <ol style="padding-left:1.2rem;font-size:.87rem;color:var(--txt-m);line-height:2">
+              <li><b>F</b>ace – drooping on one side?</li>
+              <li><b>A</b>rms – weakness/numbness?</li>
+              <li><b>S</b>peech – slurred or strange?</li>
+              <li><b>T</b>ime – call 108 NOW</li>
+              <li>Do NOT give food or water</li>
+            </ol>
+          </article>
+          <article class="card" style="box-shadow:none;border-color:var(--border)">
+            <h4 style="margin-bottom:.5rem;color:var(--primary)">🤧 Choking</h4>
+            <ol style="padding-left:1.2rem;font-size:.87rem;color:var(--txt-m);line-height:2">
+              <li>Ask "Are you choking?"</li>
+              <li>5 back blows between shoulder blades</li>
+              <li>5 abdominal thrusts (Heimlich)</li>
+              <li>Alternate until object dislodges</li>
+              <li>Call 108 if unresponsive</li>
+            </ol>
+          </article>
+          <article class="card" style="box-shadow:none;border-color:var(--border)">
+            <h4 style="margin-bottom:.5rem;color:var(--accent-dk)">🔥 Burns</h4>
+            <ol style="padding-left:1.2rem;font-size:.87rem;color:var(--txt-m);line-height:2">
+              <li>Cool with running water 10 min</li>
+              <li>Remove jewellery near burn</li>
+              <li>Cover loosely with cling film</li>
+              <li>Do NOT use ice or butter</li>
+              <li>Seek medical attention</li>
+            </ol>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main><!-- /#app -->
+
+<!-- ======================================================================
+     DOCTOR DETAIL MODAL
+====================================================================== -->
+<div class="modal-overlay hidden" id="doctorModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Doctor Details</h3>
+      <span class="modal-close" id="closeDoctorModal">✕</span>
+    </div>
+    <div id="doctorModalContent"></div>
+    <div style="display:flex;gap:.8rem;margin-top:1.5rem">
+      <button class="btn btn-primary flex-1" id="modalBookBtn">📅 Book Appointment</button>
+      <button class="btn btn-outline flex-1" data-page="reviews">⭐ Reviews</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container (CO4: DOM manipulation) -->
+<div id="toast-container"></div>
+
+<!-- ======================================================================
+     FOOTER  (CO2: semantic footer)
+====================================================================== -->
+<footer id="main-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">🏥 MediCare<span>+</span></div>
+        <p style="font-size:.85rem;margin-top:.5rem">Your trusted partner for all healthcare needs. Book appointments, find specialists, and manage your health journey with ease.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#" data-page="booking">Book Appointment</a></li>
+          <li><a href="#" data-page="doctors">Find Doctors</a></li>
+          <li><a href="#" data-page="hospitals">Hospital Finder</a></li>
+          <li><a href="#" data-page="reports">Medical Reports</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Support</h5>
+        <ul>
+          <li><a href="#">Help Center</a></li>
+          <li><a href="#">Contact Us</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#" data-page="emergency">Emergency</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Legal</h5>
+        <ul>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+          <li><a href="#">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 MediCare+ Hospital Management System. Built with ❤️ using HTML, CSS &amp; JavaScript.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================================================================
+     JAVASCRIPT  (CO3, CO4, CO5)
+====================================================================== -->
+<script>
+'use strict';
+/* =====================================================================
+   JS SECTION 1 — DATA: Doctor & Hospital Database  (CO3: Arrays/Objects)
+===================================================================== */
+const DOCTORS = [
+  { id:1,  name:'Dr. Arjun Mehta',     spec:'Cardiology',       exp:15, rating:4.9, fee:800,  slots:['9:00AM','10:00AM','2:00PM','4:00PM'],  hospital:'Apollo Hospital',   city:'Mumbai',    avatar:'👨‍⚕️', avail:true,  edu:'MBBS, MD – AIIMS Delhi',     bio:'Specialist in interventional cardiology with 15+ years of experience.' },
+  { id:2,  name:'Dr. Priya Sharma',    spec:'Neurology',        exp:12, rating:4.8, fee:900,  slots:['8:00AM','11:00AM','3:00PM','5:00PM'],  hospital:'NIMHANS',           city:'Bangalore', avatar:'👩‍⚕️', avail:true,  edu:'MBBS, DM – CMC Vellore',     bio:'Expert in epilepsy, stroke and neuro-rehabilitation.' },
+  { id:3,  name:'Dr. Ramesh Iyer',     spec:'Orthopedics',      exp:18, rating:4.7, fee:700,  slots:['9:30AM','1:00PM','3:30PM'],            hospital:'Fortis Hospital',   city:'Chennai',   avatar:'🧑‍⚕️', avail:true,  edu:'MBBS, MS Ortho – KEM Mumbai', bio:'Joint replacement and sports injury specialist.' },
+  { id:4,  name:'Dr. Sneha Patel',     spec:'Pediatrics',       exp:10, rating:4.9, fee:600,  slots:['8:30AM','10:30AM','12:00PM','4:00PM'], hospital:'Rainbow Children',  city:'Hyderabad', avatar:'👩‍⚕️', avail:true,  edu:'MBBS, DCH – Grant Medical',  bio:'Caring for children from newborns to adolescents.' },
+  { id:5,  name:'Dr. Vikram Nair',     spec:'Dermatology',      exp:9,  rating:4.6, fee:650,  slots:['10:00AM','11:30AM','2:30PM','5:00PM'], hospital:'Skin Clinic Plus',  city:'Delhi',     avatar:'👨‍⚕️', avail:true,  edu:'MBBS, DVD – Maulana Azad',   bio:'Skin, hair & cosmetic dermatology expert.' },
+  { id:6,  name:'Dr. Ananya Roy',      spec:'Gynecology',       exp:14, rating:4.8, fee:750,  slots:['9:00AM','11:00AM','2:00PM'],           hospital:'Medanta Hospital',  city:'Kolkata',   avatar:'👩‍⚕️', avail:true,  edu:'MBBS, MS – IPGMER Kolkata',  bio:'Obstetrics, IVF and high-risk pregnancy management.' },
+  { id:7,  name:'Dr. Sanjay Kapoor',   spec:'General Medicine', exp:20, rating:4.7, fee:500,  slots:['8:00AM','9:30AM','11:00AM','4:30PM'],  hospital:'City Care Hospital', city:'Mumbai',   avatar:'🧑‍⚕️', avail:true,  edu:'MBBS, MD – BJ Medical Pune', bio:'Comprehensive primary care and preventive medicine.' },
+  { id:8,  name:'Dr. Lakshmi Menon',   spec:'ENT',              exp:11, rating:4.5, fee:600,  slots:['9:00AM','12:00PM','3:00PM','6:00PM'],  hospital:'ENT Speciality',    city:'Chennai',   avatar:'👩‍⚕️', avail:false, edu:'MBBS, MS ENT – Madras Med', bio:'Head, neck, ear and sinus surgery specialist.' },
+  { id:9,  name:'Dr. Rohit Gupta',     spec:'Ophthalmology',    exp:13, rating:4.8, fee:700,  slots:['8:30AM','10:00AM','1:00PM','3:30PM'],  hospital:'Eye Care Centre',   city:'Delhi',     avatar:'👨‍⚕️', avail:true,  edu:'MBBS, MS Ophth – AIIMS',    bio:'Cataract, LASIK and retinal disease expert.' },
+  { id:10, name:'Dr. Divya Krishnan',  spec:'Cardiology',       exp:8,  rating:4.6, fee:850,  slots:['9:00AM','11:30AM','4:00PM'],           hospital:'Heart Institute',   city:'Bangalore', avatar:'👩‍⚕️', avail:true,  edu:'MBBS, DM Cardio – NIMHANS', bio:'Non-invasive cardiology and echocardiography.' },
+  { id:11, name:'Dr. Aditya Bansal',   spec:'Neurology',        exp:7,  rating:4.5, fee:800,  slots:['10:00AM','2:00PM','5:00PM'],           hospital:'Brain & Spine',     city:'Hyderabad', avatar:'👨‍⚕️', avail:true,  edu:'MBBS, DM – Nizam\'s Institute', bio:'Headache, Parkinson\'s and movement disorder specialist.' },
+  { id:12, name:'Dr. Meena Joshi',     spec:'Dermatology',      exp:16, rating:4.9, fee:700,  slots:['9:30AM','11:00AM','3:00PM','5:30PM'], hospital:'Glow Derma Clinic', city:'Mumbai',    avatar:'👩‍⚕️', avail:true,  edu:'MBBS, MD Derma – KEM',       bio:'Acne, psoriasis, hair loss and aesthetic treatments.' },
+];
+
+const HOSPITALS = [
+  { id:1, name:'Apollo Hospital',      city:'Mumbai',    addr:'Greams Road, Nungambakkam', phone:'044-28290200', type:'Multi-Specialty', beds:750, rating:4.8, lat:19.076, lng:72.877, services:['Cardiology','Neurology','Oncology','ICU'] },
+  { id:2, name:'Fortis Hospital',      city:'Chennai',   addr:'Arcot Road, Vadapalani',   phone:'044-24774444', type:'Multi-Specialty', beds:600, rating:4.7, lat:13.072, lng:80.272, services:['Orthopedics','Transplant','Robotic Surgery'] },
+  { id:3, name:'NIMHANS',              city:'Bangalore', addr:'Hosur Road, Bangalore',    phone:'080-46110007', type:'Neurological',    beds:900, rating:4.9, lat:12.971, lng:77.594, services:['Neurology','Psychiatry','Neurosurgery'] },
+  { id:4, name:'Rainbow Children',     city:'Hyderabad', addr:'Road No 2, Banjara Hills',  phone:'040-44558585', type:'Pediatric',       beds:200, rating:4.8, lat:17.385, lng:78.486, services:['Pediatrics','Neonatology','PICU'] },
+  { id:5, name:'Medanta Hospital',     city:'Kolkata',   addr:'DLF Cyber City, Gurugram',  phone:'0124-4141414', type:'Multi-Specialty', beds:1250,rating:4.7, lat:22.572, lng:88.363, services:['Cardiology','Gynecology','Cancer Care'] },
+  { id:6, name:'City Care Hospital',   city:'Mumbai',    addr:'Andheri East, Mumbai',      phone:'022-26836666', type:'General',         beds:300, rating:4.5, lat:19.113, lng:72.868, services:['General Medicine','Surgery','Maternity'] },
+  { id:7, name:'Heart Institute',      city:'Bangalore', addr:'Jayanagar, Bangalore',      phone:'080-46688888', type:'Cardiac',         beds:180, rating:4.9, lat:12.930, lng:77.583, services:['Cardiology','Cardiac Surgery','Cath Lab'] },
+  { id:8, name:'Eye Care Centre',      city:'Delhi',     addr:'Safdarjung Enclave, Delhi', phone:'011-26183405', type:'Ophthalmology',   beds:120, rating:4.8, lat:28.644, lng:77.209, services:['LASIK','Cataract','Retina','Glaucoma'] },
+];
+
+const HEALTH_TIPS = [
+  { cat:'nutrition', icon:'🥗', title:'Eat a Rainbow Daily',    body:'Include fruits and vegetables of 5 different colours every day to ensure a wide range of vitamins, minerals, and antioxidants for optimal health.' },
+  { cat:'nutrition', icon:'💧', title:'Stay Hydrated',           body:'Drink at least 8 glasses (2 litres) of water daily. Proper hydration improves cognition, energy levels, and digestion significantly.' },
+  { cat:'fitness',   icon:'🚶', title:'Walk 10,000 Steps',       body:'A daily 10,000 step goal reduces the risk of cardiovascular disease by up to 30%. Start with 5,000 and build up gradually.' },
+  { cat:'fitness',   icon:'🏋️', title:'Strength Train 2×/Week',  body:'Resistance training twice a week maintains muscle mass, strengthens bones, and boosts metabolism even at rest.' },
+  { cat:'mental',    icon:'🧘', title:'Practice Mindfulness',    body:'Just 10 minutes of daily meditation reduces cortisol (stress hormone) levels by 14%, improving focus and emotional resilience.' },
+  { cat:'mental',    icon:'🤝', title:'Social Connections',      body:'Strong social ties are linked to a 50% increased likelihood of longer life. Make time for friends and family every week.' },
+  { cat:'sleep',     icon:'😴', title:'Sleep 7–9 Hours',         body:'Consistent quality sleep is the cornerstone of immune function, memory consolidation, and mood regulation. Avoid screens 1 hour before bed.' },
+  { cat:'sleep',     icon:'🌙', title:'Keep a Sleep Schedule',   body:'Going to bed and waking at the same time daily — even on weekends — resets your circadian rhythm and dramatically improves sleep quality.' },
+  { cat:'prevention',icon:'🦷', title:'Brush & Floss Daily',    body:'Oral bacteria are linked to heart disease and diabetes. Brush twice a day, floss once, and visit a dentist every 6 months.' },
+  { cat:'prevention',icon:'☀️', title:'Apply Sunscreen Daily',   body:'UV exposure is the #1 cause of skin ageing and skin cancer. Use SPF 30+ every morning, even on cloudy days.' },
+  { cat:'nutrition', icon:'🐟', title:'Eat Omega-3 Rich Foods',  body:'Fatty fish, walnuts, and flaxseed are rich in omega-3 fatty acids that reduce inflammation, triglycerides, and blood pressure.' },
+  { cat:'fitness',   icon:'🧗', title:'Take the Stairs',         body:'Climbing stairs burns 8× more calories than the elevator. This simple habit adds cardio into your daily routine effortlessly.' },
+];
+
+const EMERGENCY_CONTACTS = [
+  { icon:'🚑', name:'National Ambulance', phone:'108', desc:'Free ambulance service 24/7' },
+  { icon:'🚒', name:'Fire Emergency',     phone:'101', desc:'Fire brigade & rescue' },
+  { icon:'🚓', name:'Police Emergency',   phone:'100', desc:'Law enforcement emergency' },
+  { icon:'📞', name:'General Emergency',  phone:'112', desc:'All-in-one emergency line' },
+  { icon:'👶', name:'Child Helpline',     phone:'1098',desc:'Child abuse & missing child' },
+  { icon:'🧠', name:'Mental Health',      phone:'iCall 9152987821', desc:'Free psychological counselling' },
+  { icon:'💉', name:'Poison Control',     phone:'1800-116-117', desc:'24/7 poison emergency line' },
+  { icon:'🩺', name:'Medical Advice',     phone:'104', desc:'ASHA / health helpline' },
+];
+
+const SAMPLE_REVIEWS = [
+  { doctor:'Dr. Arjun Mehta', rating:5, title:'Excellent Doctor!', body:'Dr. Mehta was extremely thorough and compassionate. He took time to explain every step of my treatment. Highly recommended!', author:'Rajesh K.', date:'2025-03-15' },
+  { doctor:'Dr. Priya Sharma', rating:4, title:'Very knowledgeable', body:'Great experience overall. The wait time was a bit long but the consultation was worth it. Dr. Sharma really knows her subject.', author:'Anita M.', date:'2025-04-02' },
+  { doctor:'Dr. Sneha Patel', rating:5, title:'Best paediatrician!', body:'My toddler always feels comfortable with Dr. Patel. She has a wonderful way with children. We won\'t see anyone else!', author:'Pooja S.', date:'2025-04-18' },
+  { doctor:'Dr. Sanjay Kapoor', rating:4, title:'Good general physician', body:'Very systematic diagnosis and clear prescription. He listens patiently and explains everything. Clinic is clean and staff polite.', author:'Vijay R.', date:'2025-05-01' },
+];
+
+/* =====================================================================
+   JS SECTION 2 — STATE MANAGEMENT  (CO3: Objects, variables)
+===================================================================== */
+let state = {
+  user: JSON.parse(localStorage.getItem('medicare_user')) || null,
+  appointments: JSON.parse(localStorage.getItem('medicare_appts')) || [],
+  reports: JSON.parse(localStorage.getItem('medicare_reports')) || [],
+  reminders: JSON.parse(localStorage.getItem('medicare_reminders')) || [],
+  reviews: JSON.parse(localStorage.getItem('medicare_reviews')) || [...SAMPLE_REVIEWS],
+  currentPage: 'home',
+  booking: { doctor: null, date: null, time: null },
+  calMonth: new Date().getMonth(),
+  calYear: new Date().getFullYear(),
+  selectedDoctor: null,
+  selectedRating: 0,
+};
+
+const save = (key, data) => localStorage.setItem(`medicare_${key}`, JSON.stringify(data));
+
+/* =====================================================================
+   JS SECTION 3 — SPA ROUTER  (CO4: DOM manipulation, event handling)
+===================================================================== */
+function navigate(page) {
+  // Guard dashboard/reports/reminders — redirect to auth if not logged in
+  const authRequired = ['dashboard','reports','reminders'];
+  if (authRequired.includes(page) && !state.user) {
+    showToast('Please log in to access this page.', 'warn');
+    page = 'auth';
+  }
+
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById(`page-${page}`);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('.nav-link').forEach(l => {
+    l.classList.toggle('active', l.dataset.page === page);
+  });
+
+  // Close mobile nav
+  document.getElementById('mobileNav').classList.add('hidden');
+
+  state.currentPage = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Trigger page-specific init
+  if (page === 'doctors')   initDoctors();
+  if (page === 'hospitals') initHospitals();
+  if (page === 'booking')   initBooking();
+  if (page === 'dashboard') initDashboard();
+  if (page === 'reports')   initReports();
+  if (page === 'reminders') initReminders();
+  if (page === 'reviews')   initReviews();
+  if (page === 'tips')      initTips();
+  if (page === 'emergency') initEmergency();
+}
+
+// Delegate all [data-page] clicks
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-page]');
+  if (el) { e.preventDefault(); navigate(el.dataset.page); }
+});
+
+/* =====================================================================
+   JS SECTION 4 — DARK MODE TOGGLE  (CO4: DOM, localStorage)
+===================================================================== */
+(function initTheme() {
+  const saved = localStorage.getItem('medicare_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+  document.getElementById('darkToggle').textContent = saved === 'dark' ? '☀️' : '🌙';
+})();
+
+document.getElementById('darkToggle').addEventListener('click', () => {
+  const curr = document.documentElement.getAttribute('data-theme');
+  const next = curr === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('medicare_theme', next);
+  document.getElementById('darkToggle').textContent = next === 'dark' ? '☀️' : '🌙';
+  showToast(`${next === 'dark' ? '🌙 Dark' : '☀️ Light'} mode activated`, 'info');
+});
+
+/* =====================================================================
+   JS SECTION 5 — MOBILE NAV
+===================================================================== */
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('mobileNav').classList.toggle('hidden');
+});
+
+/* =====================================================================
+   JS SECTION 6 — AUTH: Login / Register  (CO5: form validation)
+===================================================================== */
+// Tab switching
+document.getElementById('tabLogin').addEventListener('click', () => {
+  document.getElementById('tabLogin').classList.add('active');
+  document.getElementById('tabRegister').classList.remove('active');
+  document.getElementById('loginForm').classList.remove('hidden');
+  document.getElementById('registerForm').classList.add('hidden');
+});
+document.getElementById('tabRegister').addEventListener('click', () => {
+  document.getElementById('tabRegister').classList.add('active');
+  document.getElementById('tabLogin').classList.remove('active');
+  document.getElementById('registerForm').classList.remove('hidden');
+  document.getElementById('loginForm').classList.add('hidden');
+});
+
+function showErr(id, show = true) {
+  document.getElementById(id).classList.toggle('show', show);
+}
+function validateEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+function validatePhone(p) { return /^[0-9+\s\-]{7,15}$/.test(p); }
+
+// Password strength  (CO3: conditions, functions)
+document.getElementById('regPass').addEventListener('input', function () {
+  const v = this.value;
+  let s = 0;
+  if (v.length >= 8) s++;
+  if (/[A-Z]/.test(v)) s++;
+  if (/[0-9]/.test(v)) s++;
+  if (/[^A-Za-z0-9]/.test(v)) s++;
+  const fill = document.getElementById('strengthFill');
+  const label = document.getElementById('strengthLabel');
+  const widths = ['0%','25%','50%','75%','100%'];
+  const colors = ['','#e53935','#fb8c00','#fdd835','#2e7d32'];
+  const labels = ['','Weak','Fair','Good','Strong 💪'];
+  fill.style.width = widths[s];
+  fill.style.background = colors[s];
+  label.textContent = labels[s];
+  label.style.color = colors[s];
+});
+
+// LOGIN  (CO5: form validation, localStorage)
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass  = document.getElementById('loginPass').value;
+  let valid = true;
+
+  showErr('loginEmailErr', !validateEmail(email));
+  if (!validateEmail(email)) valid = false;
+
+  showErr('loginPassErr', !pass);
+  if (!pass) valid = false;
+
+  if (!valid) return;
+
+  // Simulate async login (CO4: Promises / async-await)
+  const btn = this.querySelector('button[type="submit"]');
+  btn.innerHTML = '<span class="spinner"></span> Logging in…';
+  btn.disabled = true;
+
+  await new Promise(r => setTimeout(r, 1000)); // Simulate network
+
+  const users = JSON.parse(localStorage.getItem('medicare_users') || '[]');
+  const found = users.find(u => u.email === email && u.password === pass);
+
+  if (found) {
+    state.user = found;
+    save('user', found);
+    updateAuthUI();
+    showToast(`Welcome back, ${found.firstName}! 👋`, 'success');
+    navigate('dashboard');
+  } else {
+    showToast('Invalid email or password.', 'error');
+  }
+  btn.innerHTML = 'Login →';
+  btn.disabled = false;
+});
+
+// REGISTER
+document.getElementById('registerForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const first  = document.getElementById('regFirst').value.trim();
+  const last   = document.getElementById('regLast').value.trim();
+  const email  = document.getElementById('regEmail').value.trim();
+  const phone  = document.getElementById('regPhone').value.trim();
+  const dob    = document.getElementById('regDOB').value;
+  const gender = document.getElementById('regGender').value;
+  const pass   = document.getElementById('regPass').value;
+  const pass2  = document.getElementById('regPass2').value;
+  const terms  = document.getElementById('termsChk').checked;
+  let valid = true;
+
+  const checks = [
+    ['regFirstErr',  !first],
+    ['regLastErr',   !last],
+    ['regEmailErr',  !validateEmail(email)],
+    ['regPhoneErr',  !validatePhone(phone)],
+    ['regDOBErr',    !dob],
+    ['regGenderErr', !gender],
+    ['regPassErr',   pass.length < 8],
+    ['regPass2Err',  pass !== pass2],
+    ['termsErr',     !terms],
+  ];
+  checks.forEach(([id, cond]) => { showErr(id, cond); if (cond) valid = false; });
+  if (!valid) return;
+
+  const btn = this.querySelector('button[type="submit"]');
+  btn.innerHTML = '<span class="spinner"></span> Creating account…';
+  btn.disabled = true;
+
+  await new Promise(r => setTimeout(r, 1200));
+
+  const users = JSON.parse(localStorage.getItem('medicare_users') || '[]');
+  if (users.find(u => u.email === email)) {
+    showToast('Email already registered. Please login.', 'warn');
+    btn.innerHTML = 'Create Account →'; btn.disabled = false;
+    return;
+  }
+
+  const newUser = { id: Date.now(), firstName: first, lastName: last, email, phone, dob, gender, password: pass };
+  users.push(newUser);
+  localStorage.setItem('medicare_users', JSON.stringify(users));
+  state.user = newUser;
+  save('user', newUser);
+  updateAuthUI();
+  showToast(`Account created! Welcome, ${first} 🎉`, 'success');
+  navigate('dashboard');
+  btn.innerHTML = 'Create Account →'; btn.disabled = false;
+});
+
+// GUEST login
+document.getElementById('guestBtn').addEventListener('click', () => {
+  state.user = { firstName: 'Guest', lastName: 'User', email: 'guest@medicare.com', id: 0 };
+  save('user', state.user);
+  updateAuthUI();
+  showToast('Logged in as Guest 👤', 'info');
+  navigate('home');
+});
+
+// LOGOUT
+document.getElementById('logoutBtn').addEventListener('click', e => {
+  e.preventDefault();
+  state.user = null;
+  localStorage.removeItem('medicare_user');
+  updateAuthUI();
+  showToast('Logged out successfully. 👋', 'info');
+  navigate('home');
+});
+
+function updateAuthUI() {
+  const loggedIn = !!state.user;
+  document.getElementById('loginBtn').classList.toggle('hidden', loggedIn);
+  document.getElementById('dashBtn').classList.toggle('hidden', !loggedIn);
+  if (loggedIn) {
+    document.getElementById('dashAvatar').textContent = state.user.firstName?.[0] || '👤';
+    document.getElementById('dashName').textContent = `${state.user.firstName} ${state.user.lastName || ''}`.trim();
+    document.getElementById('dashEmail').textContent = state.user.email || '';
+  }
+}
+updateAuthUI();
+
+/* =====================================================================
+   JS SECTION 7 — DOCTORS PAGE  (CO3: loops, filter, DOM)
+===================================================================== */
+let activeSpec = 'all';
+
+function initDoctors() {
+  renderDoctors(DOCTORS);
+  // Populate review doctor select
+  const sel = document.getElementById('revDoctor');
+  sel.innerHTML = '<option value="">— Select —</option>';
+  DOCTORS.forEach(d => sel.innerHTML += `<option>${d.name}</option>`);
+}
+
+function renderDoctors(list) {
+  const grid = document.getElementById('doctorsGrid');
+  if (!list.length) { grid.innerHTML = '<p style="color:var(--txt-m);padding:2rem">No doctors found.</p>'; return; }
+
+  grid.innerHTML = list.map(d => `
+    <article class="doctor-card" data-id="${d.id}">
+      <div class="doctor-card-top">
+        <div class="doctor-avatar">${d.avatar}</div>
+        <h4>${d.name}</h4>
+        <div class="spec">${d.spec} · ${d.city}</div>
+      </div>
+      <div class="doctor-card-body">
+        <div class="doctor-meta">
+          <div class="doctor-meta-item"><strong>${d.exp}yr</strong>Experience</div>
+          <div class="doctor-meta-item"><strong>₹${d.fee}</strong>Fee</div>
+          <div class="doctor-meta-item"><strong>${d.rating}⭐</strong>Rating</div>
+        </div>
+        <div class="avail-slots">${d.slots.slice(0,3).map(s => `<div class="slot">${s}</div>`).join('')}</div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="badge ${d.avail ? 'badge-success' : 'badge-danger'}">${d.avail ? '✅ Available' : '❌ Unavailable'}</span>
+          <button class="btn btn-primary btn-sm" onclick="openDoctorModal(${d.id})">View →</button>
+        </div>
+      </div>
+    </article>
+  `).join('');
+}
+
+// Filter buttons  (CO3: arrow functions, conditions)
+document.getElementById('specialtyFilters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeSpec = btn.dataset.spec;
+  filterDoctors();
+});
+
+document.getElementById('docSearch').addEventListener('input', filterDoctors);
+document.getElementById('docFilter').addEventListener('change', filterDoctors);
+
+function filterDoctors() {
+  const q    = document.getElementById('docSearch').value.toLowerCase();
+  const spec = document.getElementById('docFilter').value;
+  const filtered = DOCTORS.filter(d => {
+    const matchSpec   = (activeSpec === 'all' || d.spec === activeSpec) && (!spec || d.spec === spec);
+    const matchSearch = d.name.toLowerCase().includes(q) || d.spec.toLowerCase().includes(q) || d.city.toLowerCase().includes(q);
+    return matchSpec && matchSearch;
+  });
+  renderDoctors(filtered);
+}
+
+// Quick search from home page
+document.getElementById('quickSearchBtn').addEventListener('click', () => {
+  const q    = document.getElementById('qs-name').value;
+  const spec = document.getElementById('qs-spec').value;
+  document.getElementById('docSearch').value = q;
+  document.getElementById('docFilter').value = spec;
+  navigate('doctors');
+  filterDoctors();
+});
+
+/* =====================================================================
+   JS SECTION 8 — DOCTOR MODAL
+===================================================================== */
+function openDoctorModal(id) {
+  const d = DOCTORS.find(doc => doc.id === id);
+  if (!d) return;
+  state.selectedDoctor = d;
+  document.getElementById('doctorModalContent').innerHTML = `
+    <div style="text-align:center;margin-bottom:1.2rem">
+      <div style="font-size:3.5rem;margin-bottom:.4rem">${d.avatar}</div>
+      <h3 style="font-size:1.25rem">${d.name}</h3>
+      <div class="tag">${d.spec}</div>
+      <div style="font-size:.85rem;color:var(--txt-m);margin-top:.4rem">${d.hospital} · ${d.city}</div>
+    </div>
+    <div class="grid-2" style="gap:.8rem;margin-bottom:1rem;font-size:.88rem">
+      <div class="card" style="box-shadow:none"><strong>📚 Education</strong><br/><span style="color:var(--txt-m)">${d.edu}</span></div>
+      <div class="card" style="box-shadow:none"><strong>⏱ Experience</strong><br/><span style="color:var(--txt-m)">${d.exp} years</span></div>
+      <div class="card" style="box-shadow:none"><strong>💰 Consultation Fee</strong><br/><span style="color:var(--primary);font-weight:700">₹${d.fee}</span></div>
+      <div class="card" style="box-shadow:none"><strong>⭐ Rating</strong><br/><span style="color:#f59e0b;font-weight:700">${d.rating} / 5</span></div>
+    </div>
+    <p style="font-size:.9rem;margin-bottom:1rem">${d.bio}</p>
+    <div><strong style="font-size:.85rem">Available Slots:</strong>
+      <div class="time-slots" style="margin-top:.5rem">${d.slots.map(s => `<div class="time-slot">${s}</div>`).join('')}</div>
+    </div>
+  `;
+  document.getElementById('doctorModal').classList.remove('hidden');
+}
+
+document.getElementById('closeDoctorModal').addEventListener('click', () => {
+  document.getElementById('doctorModal').classList.add('hidden');
+});
+document.getElementById('doctorModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('doctorModal')) document.getElementById('doctorModal').classList.add('hidden');
+});
+document.getElementById('modalBookBtn').addEventListener('click', () => {
+  document.getElementById('doctorModal').classList.add('hidden');
+  navigate('booking');
+  if (state.selectedDoctor) prefillBookingDoctor(state.selectedDoctor);
+});
+
+function prefillBookingDoctor(d) {
+  document.getElementById('bookSpec').value = d.spec;
+  populateBookingDoctors(d.spec);
+  document.getElementById('bookDoc').value = d.id;
+  showDoctorPreview(d);
+}
+
+/* =====================================================================
+   JS SECTION 9 — HOSPITALS / MAP  (CO5: Geolocation API)
+===================================================================== */
+function initHospitals() { renderHospitals(HOSPITALS); }
+
+function renderHospitals(list) {
+  document.getElementById('hospitalCount').textContent = `Showing ${list.length} hospital${list.length !== 1 ? 's' : ''}`;
+  document.getElementById('hospitalsList').innerHTML = list.map(h => `
+    <article class="hospital-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.6rem">
+        <h4>🏥 ${h.name}</h4>
+        <span class="badge badge-success">${h.rating}⭐</span>
+      </div>
+      <div class="hospital-info">
+        <span>📍 ${h.addr}, ${h.city}</span>
+        <span>📞 <a href="tel:${h.phone}">${h.phone}</a></span>
+        <span>🏷️ ${h.type} · 🛏 ${h.beds} beds</span>
+        <span>⚕️ ${h.services.join(' · ')}</span>
+      </div>
+      <div style="margin-top:.8rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" onclick="bookAtHospital('${h.name}')">📅 Book Here</button>
+        <a href="https://www.google.com/maps?q=${h.lat},${h.lng}" target="_blank" class="btn btn-outline btn-sm">🗺️ Get Directions</a>
+      </div>
+    </article>
+  `).join('');
+}
+
+function bookAtHospital(name) { navigate('booking'); showToast(`Booking at ${name}`, 'info'); }
+
+// Geolocation  (CO5: async, Geolocation API)
+document.getElementById('locateBtn').addEventListener('click', async () => {
+  if (!navigator.geolocation) { showToast('Geolocation not supported.', 'error'); return; }
+  const btn = document.getElementById('locateBtn');
+  btn.textContent = '⌛ Locating…';
+  btn.disabled = true;
+
+  try {
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, { timeout: 8000 })
+    );
+    const { latitude: lat, longitude: lng } = pos.coords;
+    showToast(`📍 Location found: ${lat.toFixed(3)}, ${lng.toFixed(3)}`, 'success');
+    simulateMapWithLocation(lat, lng);
+    // Sort hospitals by simulated distance
+    const sorted = [...HOSPITALS].sort((a, b) => {
+      const da = Math.hypot(a.lat - lat, a.lng - lng);
+      const db = Math.hypot(b.lat - lat, b.lng - lng);
+      return da - db;
+    });
+    renderHospitals(sorted);
+    document.getElementById('hospitalCount').textContent = `Showing hospitals nearest to your location`;
+  } catch {
+    showToast('Could not get your location. Try searching manually.', 'warn');
+  }
+  btn.textContent = '📍 My Location';
+  btn.disabled = false;
+});
+
+function simulateMapWithLocation(lat, lng) {
+  const map = document.getElementById('mapSimulated');
+  document.getElementById('mapStatus').textContent = `📍 Your location: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  // Draw pins
+  const pins = document.getElementById('mapPins');
+  pins.innerHTML = '';
+  const colors = ['#e53935','#1060a8','#2e7d32','#fb8c00','#7b1fa2','#00838f','#558b2f','#4527a0'];
+  HOSPITALS.forEach((h, i) => {
+    const x = Math.random() * 80 + 10;
+    const y = Math.random() * 70 + 10;
+    const pin = document.createElement('div');
+    pin.style.cssText = `position:absolute;left:${x}%;top:${y}%;transform:translate(-50%,-50%);
+      background:${colors[i % colors.length]};color:#fff;border-radius:50% 50% 50% 0;
+      width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+      font-size:.7rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.3);
+      transform:rotate(-45deg);transition:all .2s`;
+    pin.title = h.name;
+    pin.innerHTML = `<span style="transform:rotate(45deg)">🏥</span>`;
+    pins.appendChild(pin);
+  });
+  // User pin
+  const up = document.createElement('div');
+  up.style.cssText = `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    background:#e53935;color:#fff;border-radius:50%;width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;font-size:.7rem;
+    box-shadow:0 0 0 6px rgba(229,57,53,.25);z-index:2`;
+  up.title = 'Your Location';
+  up.textContent = '📍';
+  pins.appendChild(up);
+}
+
+document.getElementById('mapSearchBtn').addEventListener('click', () => {
+  const q = document.getElementById('mapSearch').value.toLowerCase();
+  const filtered = HOSPITALS.filter(h =>
+    h.name.toLowerCase().includes(q) || h.city.toLowerCase().includes(q) ||
+    h.type.toLowerCase().includes(q) || h.services.some(s => s.toLowerCase().includes(q))
+  );
+  renderHospitals(filtered);
+});
+
+/* =====================================================================
+   JS SECTION 10 — BOOKING SYSTEM  (CO4: DOM, localStorage, steps)
+===================================================================== */
+let bookingStep = 1;
+
+function initBooking() {
+  bookingStep = 1;
+  goToBookingStep(1);
+  renderCalendar();
+  renderTimeSlots();
+
+  document.getElementById('bookSpec').value = '';
+  document.getElementById('bookDoc').innerHTML = '<option value="">— Select specialty first —</option>';
+  document.getElementById('selectedDoctorPreview').classList.add('hidden');
+  state.booking = { doctor: null, date: null, time: null };
+}
+
+function goToBookingStep(n) {
+  bookingStep = n;
+  document.querySelectorAll('.booking-form-section').forEach((s, i) => {
+    s.classList.toggle('active', i + 1 === n);
+  });
+  document.querySelectorAll('.step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 < n) s.classList.add('done');
+    if (i + 1 === n) s.classList.add('active');
+  });
+}
+
+// Step navigation
+document.getElementById('step1Next').addEventListener('click', () => {
+  if (!state.booking.doctor) { showToast('Please select a doctor.', 'warn'); return; }
+  goToBookingStep(2);
+});
+document.getElementById('step2Back').addEventListener('click', () => goToBookingStep(1));
+document.getElementById('step2Next').addEventListener('click', () => {
+  if (!state.booking.date) { showToast('Please select a date.', 'warn'); return; }
+  if (!state.booking.time) { showToast('Please select a time slot.', 'warn'); return; }
+  goToBookingStep(3);
+});
+document.getElementById('step3Back').addEventListener('click', () => goToBookingStep(2));
+document.getElementById('step3Next').addEventListener('click', () => {
+  const name  = document.getElementById('pName').value.trim();
+  const age   = document.getElementById('pAge').value;
+  const phone = document.getElementById('pPhone').value.trim();
+  const email = document.getElementById('pEmail').value.trim();
+  let valid = true;
+  [['pNameErr', !name], ['pAgeErr', !age || age < 1], ['pPhoneErr', !validatePhone(phone)], ['pEmailErr', !validateEmail(email)]]
+    .forEach(([id, c]) => { showErr(id, c); if (c) valid = false; });
+  if (!valid) return;
+  buildBookingSummary();
+  goToBookingStep(4);
+});
+document.getElementById('step4Back').addEventListener('click', () => goToBookingStep(3));
+
+document.getElementById('confirmBooking').addEventListener('click', async () => {
+  const btn = document.getElementById('confirmBooking');
+  btn.innerHTML = '<span class="spinner"></span> Confirming…';
+  btn.disabled = true;
+
+  await new Promise(r => setTimeout(r, 1500));
+
+  const appt = {
+    id: Date.now(),
+    doctor:    state.booking.doctor?.name,
+    specialty: state.booking.doctor?.spec,
+    hospital:  state.booking.doctor?.hospital,
+    date:      state.booking.date,
+    time:      state.booking.time,
+    patient:   document.getElementById('pName').value,
+    phone:     document.getElementById('pPhone').value,
+    email:     document.getElementById('pEmail').value,
+    symptoms:  document.getElementById('pSymptoms').value,
+    type:      document.getElementById('pType').value,
+    payment:   document.getElementById('payMethod').value,
+    status:    'Confirmed',
+    bookedAt:  new Date().toISOString(),
+  };
+
+  state.appointments.push(appt);
+  save('appointments', state.appointments);
+
+  // Auto-add reminder
+  state.reminders.push({ id: Date.now(), title: `Appointment: ${appt.doctor}`, type: 'Appointment', date: appt.date, time: appt.time, note: appt.symptoms || '', color: '#1060a8' });
+  save('reminders', state.reminders);
+
+  showToast('🎉 Appointment confirmed! A reminder has been set.', 'success');
+  navigate('dashboard');
+  btn.innerHTML = '🎉 Confirm Booking';
+  btn.disabled = false;
+});
+
+// Specialty → Doctor dropdown
+document.getElementById('bookSpec').addEventListener('change', function () {
+  populateBookingDoctors(this.value);
+  state.booking.doctor = null;
+  document.getElementById('selectedDoctorPreview').classList.add('hidden');
+});
+document.getElementById('bookDoc').addEventListener('change', function () {
+  const d = DOCTORS.find(doc => doc.id == this.value);
+  if (d) { state.booking.doctor = d; showDoctorPreview(d); }
+});
+
+function populateBookingDoctors(spec) {
+  const sel = document.getElementById('bookDoc');
+  const filtered = spec ? DOCTORS.filter(d => d.spec === spec) : DOCTORS;
+  sel.innerHTML = '<option value="">— Select doctor —</option>' +
+    filtered.map(d => `<option value="${d.id}">${d.name} (${d.city})</option>`).join('');
+}
+
+function showDoctorPreview(d) {
+  document.getElementById('sdpAvatar').textContent = d.avatar;
+  document.getElementById('sdpName').textContent   = d.name;
+  document.getElementById('sdpSpec').textContent   = d.spec + ' · ' + d.hospital;
+  document.getElementById('sdpExp').textContent    = `${d.exp} years exp · ₹${d.fee} fee · ⭐ ${d.rating}`;
+  document.getElementById('selectedDoctorPreview').classList.remove('hidden');
+}
+
+// Calendar
+function renderCalendar() {
+  const grid  = document.getElementById('calGrid');
+  const label = document.getElementById('calMonthLabel');
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  label.textContent = `${months[state.calMonth]} ${state.calYear}`;
+  const firstDay = new Date(state.calYear, state.calMonth, 1).getDay();
+  const daysInMonth = new Date(state.calYear, state.calMonth + 1, 0).getDate();
+  const today = new Date();
+  let html = '';
+  for (let i = 0; i < firstDay; i++) html += '<div></div>';
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(state.calYear, state.calMonth, d);
+    const isPast = date < new Date(today.toDateString());
+    const isToday = date.toDateString() === today.toDateString();
+    const dateStr = `${state.calYear}-${String(state.calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isSelected = state.booking.date === dateStr;
+    html += `<div class="cal-day ${isPast ? 'disabled' : ''} ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}"
+               data-date="${dateStr}">${d}</div>`;
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cal-day:not(.disabled)').forEach(el => {
+    el.addEventListener('click', () => {
+      state.booking.date = el.dataset.date;
+      grid.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      renderTimeSlots();
+    });
+  });
+}
+
+document.getElementById('prevMonth').addEventListener('click', () => {
+  if (state.calMonth === 0) { state.calMonth = 11; state.calYear--; } else state.calMonth--;
+  renderCalendar();
+});
+document.getElementById('nextMonth').addEventListener('click', () => {
+  if (state.calMonth === 11) { state.calMonth = 0; state.calYear++; } else state.calMonth++;
+  renderCalendar();
+});
+
+function renderTimeSlots() {
+  const times = ['8:00 AM','8:30 AM','9:00 AM','9:30 AM','10:00 AM','10:30 AM','11:00 AM','11:30 AM','12:00 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM','5:00 PM','5:30 PM','6:00 PM'];
+  const container = document.getElementById('timeSlots');
+  container.innerHTML = times.map(t =>
+    `<div class="time-slot ${state.booking.time === t ? 'selected' : ''}" data-t="${t}">${t}</div>`
+  ).join('');
+  container.querySelectorAll('.time-slot').forEach(el => {
+    el.addEventListener('click', () => {
+      state.booking.time = el.dataset.t;
+      container.querySelectorAll('.time-slot').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+  });
+}
+
+function buildBookingSummary() {
+  const d = state.booking.doctor;
+  const summary = document.getElementById('bookingSummary');
+  summary.innerHTML = `
+    <div class="row"><span>👨‍⚕️ Doctor</span><strong>${d ? d.name : '-'}</strong></div>
+    <div class="row"><span>🏥 Hospital</span><span>${d ? d.hospital : '-'}</span></div>
+    <div class="row"><span>📅 Date</span><span>${state.booking.date || '-'}</span></div>
+    <div class="row"><span>⏰ Time</span><span>${state.booking.time || '-'}</span></div>
+    <div class="row"><span>👤 Patient</span><span>${document.getElementById('pName').value}</span></div>
+    <div class="row"><span>🔬 Type</span><span>${document.getElementById('pType').value}</span></div>
+    <div class="row"><span>💰 Fee</span><strong style="color:var(--primary)">₹${d ? d.fee : '-'}</strong></div>
+  `;
+}
+
+/* =====================================================================
+   JS SECTION 11 — DASHBOARD  (CO4: localStorage read)
+===================================================================== */
+function initDashboard() {
+  updateAuthUI();
+  const appts    = state.appointments;
+  const reports  = state.reports;
+  const reminders = state.reminders;
+  const reviews  = state.reviews.filter(r => r.self);
+
+  document.getElementById('statAppt').textContent     = appts.length;
+  document.getElementById('statReports').textContent  = reports.length;
+  document.getElementById('statReminders').textContent= reminders.length;
+  document.getElementById('statReviews').textContent  = reviews.length;
+
+  const tbody = document.getElementById('dashApptBody');
+  if (!appts.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--txt-m);padding:2rem">No appointments yet. <a href="#" data-page="booking">Book one now →</a></td></tr>';
+    return;
+  }
+  tbody.innerHTML = appts.slice().reverse().map((a, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td><strong>${a.doctor}</strong></td>
+      <td><span class="tag">${a.specialty}</span></td>
+      <td>${a.date}</td>
+      <td>${a.time}</td>
+      <td>${a.type}</td>
+      <td><span class="badge badge-success">✅ ${a.status}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="cancelAppt(${a.id})">Cancel</button></td>
+    </tr>
+  `).join('');
+}
+
+function cancelAppt(id) {
+  if (!confirm('Cancel this appointment?')) return;
+  state.appointments = state.appointments.filter(a => a.id !== id);
+  save('appointments', state.appointments);
+  initDashboard();
+  showToast('Appointment cancelled.', 'warn');
+}
+
+/* =====================================================================
+   JS SECTION 12 — MEDICAL REPORTS  (CO4: File API, DOM)
+===================================================================== */
+function initReports() { renderReports(); }
+
+const REPORT_ICONS = { pdf:'📄', jpg:'🖼️', jpeg:'🖼️', png:'🖼️', docx:'📝', default:'📁' };
+
+function renderReports() {
+  const filter = document.getElementById('reportFilter').value;
+  const list = filter === 'All Types' ? state.reports : state.reports.filter(r => r.category === filter);
+  document.getElementById('reportCount').textContent = state.reports.length;
+  const container = document.getElementById('reportsList');
+  if (!list.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--txt-m)">No reports found.</div>'; return; }
+  container.innerHTML = list.map(r => {
+    const ext = r.name.split('.').pop().toLowerCase();
+    const icon = REPORT_ICONS[ext] || REPORT_ICONS.default;
+    return `
+      <div class="report-item">
+        <div class="report-icon">${icon}</div>
+        <div class="report-info">
+          <h5>${r.name}</h5>
+          <small>${r.category} · ${r.size} · Uploaded ${r.date}</small>
+        </div>
+        <div style="display:flex;gap:.5rem">
+          <button class="btn btn-outline btn-sm">👁 View</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteReport(${r.id})">🗑</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('reportFilter').addEventListener('change', renderReports);
+
+// Drag and drop + click to upload
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag');
+  handleFiles(e.dataTransfer.files);
+});
+document.getElementById('fileInput').addEventListener('change', function () { handleFiles(this.files); });
+
+async function handleFiles(files) {
+  for (const file of files) {
+    if (file.size > 10 * 1024 * 1024) { showToast(`${file.name} exceeds 10MB limit.`, 'error'); continue; }
+    await new Promise(r => setTimeout(r, 600)); // Simulate upload
+    const report = {
+      id: Date.now() + Math.random(),
+      name: file.name,
+      size: formatBytes(file.size),
+      category: guessCategory(file.name),
+      date: new Date().toLocaleDateString('en-IN'),
+    };
+    state.reports.push(report);
+    save('reports', state.reports);
+    showToast(`✅ ${file.name} uploaded successfully!`, 'success');
+    renderReports();
+  }
+}
+
+function formatBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+function guessCategory(name) {
+  const n = name.toLowerCase();
+  if (n.includes('blood') || n.includes('cbc')) return 'Blood Test';
+  if (n.includes('xray') || n.includes('x-ray')) return 'X-Ray';
+  if (n.includes('scan') || n.includes('mri') || n.includes('ct')) return 'Scan';
+  if (n.includes('prescription') || n.includes('rx')) return 'Prescription';
+  return 'Other';
+}
+
+function deleteReport(id) {
+  state.reports = state.reports.filter(r => r.id !== id);
+  save('reports', state.reports);
+  renderReports();
+  showToast('Report deleted.', 'warn');
+}
+
+/* =====================================================================
+   JS SECTION 13 — REVIEWS & RATINGS  (CO3: Objects, conditions)
+===================================================================== */
+function initReviews() {
+  // Populate doctor select
+  const sel = document.getElementById('revDoctor');
+  sel.innerHTML = '<option value="">— Select —</option>' + DOCTORS.map(d => `<option>${d.name}</option>`).join('');
+  renderReviews();
+}
+
+// Star rating interactive
+document.getElementById('starSelect').addEventListener('click', e => {
+  const s = e.target.closest('span');
+  if (!s) return;
+  state.selectedRating = +s.dataset.v;
+  document.getElementById('revRating').value = state.selectedRating;
+  document.querySelectorAll('#starSelect span').forEach((el, i) => el.classList.toggle('lit', i < state.selectedRating));
+});
+
+document.getElementById('reviewForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const doc   = document.getElementById('revDoctor').value;
+  const rating = state.selectedRating;
+  const title  = document.getElementById('revTitle').value.trim();
+  const body   = document.getElementById('revBody').value.trim();
+  let valid = true;
+  [['revDoctorErr', !doc], ['revRatingErr', rating === 0], ['revTitleErr', !title], ['revBodyErr', !body]]
+    .forEach(([id, c]) => { showErr(id, c); if (c) valid = false; });
+  if (!valid) return;
+
+  const review = {
+    doctor: doc, rating, title, body,
+    author: state.user ? `${state.user.firstName} ${state.user.lastName || ''}`.trim() : 'Anonymous',
+    date: new Date().toLocaleDateString('en-IN'),
+    self: true,
+  };
+  state.reviews.unshift(review);
+  save('reviews', state.reviews);
+  renderReviews();
+  document.getElementById('reviewForm').reset();
+  state.selectedRating = 0;
+  document.querySelectorAll('#starSelect span').forEach(el => el.classList.remove('lit'));
+  showToast('⭐ Review submitted! Thank you.', 'success');
+});
+
+function renderReviews() {
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  document.getElementById('reviewsList').innerHTML = state.reviews.map(r => `
+    <article class="review-card">
+      <div class="review-header">
+        <div class="reviewer">
+          <div class="reviewer-av">${r.author[0] || '?'}</div>
+          <div>
+            <div style="font-weight:600;font-size:.9rem">${r.author}</div>
+            <div style="font-size:.78rem;color:var(--txt-m)">${r.doctor} · ${r.date}</div>
+          </div>
+        </div>
+        <div style="color:#f59e0b;font-size:1rem">${stars(r.rating)}</div>
+      </div>
+      <div style="font-weight:600;margin-bottom:.3rem;font-size:.93rem">${r.title}</div>
+      <p style="font-size:.87rem">${r.body}</p>
+    </article>
+  `).join('');
+}
+
+/* =====================================================================
+   JS SECTION 14 — REMINDERS  (CO4: localStorage, async)
+===================================================================== */
+function initReminders() { renderReminders(); }
+
+const REM_COLORS = { Appointment:'#1060a8', Medication:'#2e7d32', 'Test / Checkup':'#fb8c00', Vaccine:'#7b1fa2', Other:'#546e7a' };
+
+document.getElementById('reminderForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const title = document.getElementById('remTitle').value.trim();
+  const date  = document.getElementById('remDate').value;
+  const time  = document.getElementById('remTime').value;
+  let valid = true;
+  [['remTitleErr', !title], ['remDateErr', !date], ['remTimeErr', !time]]
+    .forEach(([id, c]) => { showErr(id, c); if (c) valid = false; });
+  if (!valid) return;
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.innerHTML = '<span class="spinner"></span>';
+  btn.disabled = true;
+  await new Promise(r => setTimeout(r, 700));
+
+  const type = document.getElementById('remType').value;
+  state.reminders.push({ id: Date.now(), title, type, date, time, note: document.getElementById('remNote').value, color: REM_COLORS[type] || '#546e7a' });
+  save('reminders', state.reminders);
+  renderReminders();
+  e.target.reset();
+  showToast('⏰ Reminder set!', 'success');
+  btn.innerHTML = '⏰ Set Reminder'; btn.disabled = false;
+});
+
+document.getElementById('clearReminders').addEventListener('click', () => {
+  if (!confirm('Clear all reminders?')) return;
+  state.reminders = [];
+  save('reminders', state.reminders);
+  renderReminders();
+  showToast('All reminders cleared.', 'warn');
+});
+
+function renderReminders() {
+  document.getElementById('reminderCount').textContent = state.reminders.length;
+  const container = document.getElementById('remindersList');
+  if (!state.reminders.length) { container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--txt-m)">No reminders set yet.</div>'; return; }
+  const sorted = [...state.reminders].sort((a, b) => new Date(`${a.date} ${a.time}`) - new Date(`${b.date} ${b.time}`));
+  container.innerHTML = sorted.map(r => `
+    <div class="reminder-item">
+      <div class="reminder-dot" style="background:${r.color}"></div>
+      <div class="reminder-info">
+        <h5>${r.title}</h5>
+        <small>📅 ${r.date} ⏰ ${r.time} · 🏷️ ${r.type}${r.note ? ' · ' + r.note : ''}</small>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="deleteReminder(${r.id})">🗑</button>
+    </div>
+  `).join('');
+}
+
+function deleteReminder(id) {
+  state.reminders = state.reminders.filter(r => r.id !== id);
+  save('reminders', state.reminders);
+  renderReminders();
+  showToast('Reminder removed.', 'warn');
+}
+
+/* =====================================================================
+   JS SECTION 15 — HEALTH TIPS
+===================================================================== */
+let activeTipCat = 'all';
+
+function initTips() {
+  const daily = HEALTH_TIPS[new Date().getDay() % HEALTH_TIPS.length];
+  document.getElementById('todayTip').textContent = `${daily.icon} ${daily.title}: ${daily.body}`;
+  renderTips(HEALTH_TIPS);
+
+  document.getElementById('tipsFilter').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('#tipsFilter .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTipCat = btn.dataset.cat;
+    renderTips(activeTipCat === 'all' ? HEALTH_TIPS : HEALTH_TIPS.filter(t => t.cat === activeTipCat));
+  });
+}
+
+function renderTips(list) {
+  document.getElementById('tipsGrid').innerHTML = list.map(t => `
+    <article class="tip-card">
+      <div class="tip-card-head">
+        <div class="icon">${t.icon}</div>
+        <h4>${t.title}</h4>
+      </div>
+      <div class="tip-card-body">
+        <p>${t.body}</p>
+        <div class="tag mt-sm">${t.cat}</div>
+      </div>
+    </article>
+  `).join('');
+}
+
+/* =====================================================================
+   JS SECTION 16 — EMERGENCY PAGE
+===================================================================== */
+function initEmergency() {
+  document.getElementById('emergencyGrid').innerHTML = EMERGENCY_CONTACTS.map(c => `
+    <div class="emergency-card">
+      <span class="icon">${c.icon}</span>
+      <h4>${c.name}</h4>
+      <p style="font-size:.8rem;margin-bottom:.5rem">${c.desc}</p>
+      <a href="tel:${c.phone}" class="phone">${c.phone}</a>
+    </div>
+  `).join('');
+}
+
+/* =====================================================================
+   JS SECTION 17 — TOAST NOTIFICATION SYSTEM  (CO4: DOM creation)
+===================================================================== */
+function showToast(msg, type = 'info', duration = 3500) {
+  const icons = { success:'✅', error:'❌', warn:'⚠️', info:'ℹ️' };
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `<span>${icons[type] || 'ℹ️'}</span><span>${msg}</span>`;
+  document.getElementById('toast-container').appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('hide');
+    setTimeout(() => toast.remove(), 350);
+  }, duration);
+}
+
+/* =====================================================================
+   JS SECTION 18 — PAGE LOAD INIT  (CO3: functions, CO4: DOM)
+===================================================================== */
+(function onLoad() {
+  // Animate progress bars with slight delay
+  setTimeout(() => {
+    document.querySelectorAll('.progress-fill').forEach(el => {
+      const w = el.style.width;
+      el.style.width = '0';
+      setTimeout(() => { el.style.width = w; }, 100);
+    });
+  }, 500);
+
+  // Set min date to today for booking
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('remDate').min = today;
+
+  // Welcome toast
+  if (state.user) {
+    showToast(`Welcome back, ${state.user.firstName}! 👋`, 'success');
+  }
+})();
+
+/*
+=======================================================================
+  COURSE OUTCOME MAPPING SUMMARY
+=======================================================================
+  CO1 — HTML Document Structure, Typography, CSS syntax, Selectors,
+         Color representation, Margin/Padding/Border:
+         • Used throughout: semantic HTML (header, nav, main, section,
+           article, footer), headings h1–h5, paragraphs, links,
+           CSS rules for every element including font, color variables,
+           margins, padding, and border properties.
+
+  CO2 — HTML Forms, Semantic Tags, Tables, Media, CSS Grid, Flexbox,
+         Media Queries, Transitions, Animations, Custom Properties:
+         • Auth forms with all input types (text, email, password, date,
+           tel, select, checkbox, file), appointment table, CSS Grid
+           layouts (grid-2, grid-3, grid-4, stats-row, footer-grid),
+           Flexbox for header/nav/cards, @media queries at 900px & 580px,
+           transition on every interactive element, @keyframes animations
+           (fadeUp, slideIn, slideOut, pulse-bg, heartbeat, shimmer),
+           :root CSS custom properties for entire design system.
+
+  CO3 — JavaScript Expressions, Operators, Conditions, Loops,
+         Functions, Arrow Functions, Callbacks, Objects/Arrays:
+         • DOCTORS/HOSPITALS/HEALTH_TIPS/EMERGENCY_CONTACTS arrays of
+           objects, arrow functions (filterDoctors, renderDoctors, etc.),
+           loops (map, forEach, filter), conditions (ternaries, if/else),
+           callback functions (event listeners), operators (+, &&, ||, !).
+
+  CO4 — DOM Manipulation, Event Handling, LocalStorage, Async/Promises:
+         • navigate(), renderDoctors(), initDashboard() etc. all
+           manipulate the DOM; addEventListener for clicks/input/submit;
+           localStorage.setItem/getItem with JSON serialisation;
+           async/await in login, register, confirm booking, file upload;
+           Promise constructor wrapping geolocation and setTimeout.
+
+  CO5 — Form Validation, Dynamic Input Handling, API Integration,
+         Page Optimisation, SEO Meta Tags:
+         • Full client-side validation on login, register, booking,
+           review, reminder forms with live error display; password
+           strength meter; dynamic doctor dropdown based on specialty;
+           Geolocation API with navigator.geolocation.getCurrentPosition;
+           lazy page init (pages render only when navigated to);
+           SEO meta tags (description, keywords, author, viewport).
+=======================================================================
+*/
+</script>
+</body>
+</html>
